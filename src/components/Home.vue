@@ -5,7 +5,7 @@
                 <el-menu
                         :router="true"
                         :default-active="$route.path"
-                        :default-openeds="['1','1-1']"
+                        :default-openeds="['1','4-1']"
                 >
                     <!-- 上面 router激活，vue-router功能 index=to -->
                     <el-submenu index="1">
@@ -29,7 +29,7 @@
                         </el-submenu>
                         <el-submenu index="4-1">
                             <template slot="title"><i class="el-icon-folder"></i>药剂机械出库管理</template>
-                            <el-menu-item index="4-1-1"><i class="el-icon-document-copy"></i>药剂管理</el-menu-item>
+                            <el-menu-item index="/Deliveryrecord"><i class="el-icon-document-copy"></i>药剂管理</el-menu-item>
                             <el-menu-item index="4-1-2"><i class="el-icon-document-copy"></i>出库管理</el-menu-item>
                         </el-submenu>
                         <el-submenu index="5-1">
