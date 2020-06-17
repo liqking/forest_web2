@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 
 import HomeDefault from '../components/HomeDefault'
 import home from '../components/Home'
+import  Experts from '../components/Experts'
 
 Vue.use(VueRouter)
 
@@ -15,7 +16,9 @@ const routes = [
         //子路由
         children:[
             //默认页面
-            {path:'',component: HomeDefault}
+            {path:'',component: HomeDefault},
+            //专家页面
+            {name:'Experts',path:'/Experts',component:Experts}
         ]
     }
 ]
