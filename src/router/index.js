@@ -10,7 +10,6 @@ import  Experts from '../components/Experts'
 Vue.use(VueRouter)
 
 const routes = [
-
     {
         path:'/',
         component:home,
