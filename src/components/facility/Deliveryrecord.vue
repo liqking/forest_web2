@@ -2,6 +2,7 @@
     <div>
         <!--设备管理-->
 
+        <h1 id="title">药剂/机械一览</h1>
         <!--查询-->
         <el-form :model="ruleForm" :inline="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="药剂名称" prop="name">
@@ -71,7 +72,7 @@
         <template>
             <el-table
                     :data="tableData"
-                    style="width: 100%;height: 400px">
+                    style="width: 100%;height: 357px">
                 <el-table-column
                         prop="name"
                         label="名称"
@@ -302,5 +303,9 @@
 </script>
 
 <style scoped>
-
+    #title{
+       font-size: 28px;
+        text-align: center;
+        margin-bottom: 25px;
+    }
 </style>
