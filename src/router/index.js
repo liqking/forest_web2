@@ -11,13 +11,13 @@ Vue.use(VueRouter)
 const routes = [
 
     {
-        path:'/',
+        path:'/main',
         component:home,
         //子路由
         children:[
             //默认页面
             {path:'',component: HomeDefault},
-            {path:'Deliveryrecord',component:Deliveryrecord}
+            {path:'/main/Deliveryrecord',component:Deliveryrecord}
         ]
     }
 ]
