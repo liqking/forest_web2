@@ -1,5 +1,26 @@
 <template>
   <div>
+    <el-form ref="form" :model="form" label-width="80px" class="myform">
+      <el-form-item label="害虫名">
+        <el-input
+                placeholder="请输入内容"
+                prefix-icon="el-icon-search"
+                v-model="form.input1"
+                class="myinput"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="寄主">
+        <el-input
+                placeholder="请输入内容"
+                prefix-icon="el-icon-search"
+                v-model="form.input2"
+                class="myinput"
+        ></el-input>
+      </el-form-item>
+      <el-form-item class="myBtn">
+        <el-button type="primary" icon="el-icon-plus" @click="onSubmit">查询</el-button>
+      </el-form-item>
+    </el-form>
     <h1>虫害一览</h1>
     <el-table :data="tableData" height="250" border style="width: 100%">
       <el-table-column prop="name" label="名称" width="180"></el-table-column>
@@ -23,27 +44,7 @@
 
     <AddPest :setVis="setAddVis"></AddPest>
 
-    <el-form ref="form" :model="form" label-width="80px" class="myform">
-      <el-form-item label="害虫名">
-        <el-input
-          placeholder="请输入内容"
-          prefix-icon="el-icon-search"
-          v-model="form.input1"
-          class="myinput"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="寄主">
-        <el-input
-          placeholder="请输入内容"
-          prefix-icon="el-icon-search"
-          v-model="form.input2"
-          class="myinput"
-        ></el-input>
-      </el-form-item>
-      <el-form-item class="myBtn">
-        <el-button type="primary" icon="el-icon-plus" @click="onSubmit">查询</el-button>
-      </el-form-item>
-    </el-form>
+
   </div>
 </template>
 

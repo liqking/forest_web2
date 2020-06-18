@@ -12,7 +12,7 @@
                         <template slot="title"><i class="el-icon-folder-opened"></i>森林病虫害防治系统</template>
                         <el-submenu index="1-1">
                             <template slot="title"><i class="el-icon-folder"></i>资料管理</template>
-                            <el-menu-item index="1-1-1"><i class="el-icon-document-copy"></i>虫害一览</el-menu-item>
+                            <el-menu-item index="/Pest"><i class="el-icon-document-copy"></i>虫害一览</el-menu-item>
                             <el-menu-item index="1-1-2"><i class="el-icon-document-copy"></i>病害一览</el-menu-item>
                             <el-menu-item index="1-1-2"><i class="el-icon-document-copy"></i>鼠害一览</el-menu-item>
                         </el-submenu>

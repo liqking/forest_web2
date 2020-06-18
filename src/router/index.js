@@ -8,6 +8,7 @@ import Deliveryrecord from  '../components/facility/Deliveryrecord'
 import Management from '../components/facility/Management'
 import Login from "../components/Login";
 import Experts from "../components/Experts";
+import Pest from "../components/Pest"
 
 Vue.use(VueRouter)
 
@@ -23,7 +24,10 @@ const routes = [
             {path:'/Deliveryrecord',component:Deliveryrecord},
             {path:'/Management',component:Management },
             //专家页面
-            {path:'/Experts',component:Experts}
+            {path:'/Experts',component:Experts},
+            //资料管理页面
+            {path:'/Pest',component:Pest}
+
         ],
     },
     {
