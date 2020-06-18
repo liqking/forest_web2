@@ -18,7 +18,7 @@ const routes = [
         children:[
             //默认页面
             {path:'',component: HomeDefault},
-            {path:'Deliveryrecord',component:Deliveryrecord}
+            {path:'Deliveryrecord',component:Deliveryrecord},
             {path:'',component: HomeDefault},
             //专家页面
             {name:'Experts',path:'/Experts',component:Experts}
