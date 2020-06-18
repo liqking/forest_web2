@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Experts from './Experts'
-
+import Pest from './Pest'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -22,6 +22,7 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    Experts
+    Experts,
+      Pest
   }
 })
