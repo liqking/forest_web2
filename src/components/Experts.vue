@@ -26,7 +26,11 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex';
     export default {
+        computed: {
+            ...mapState('Experts', ["open"])
+        },
         name: "Experts",
         data() {
             return {
@@ -35,6 +39,7 @@
         },
         methods: {
             tableRowClassName({row, rowIndex}) {
+                console.log(this.open)
                 console.log(row);
                 if (rowIndex === 1) {
                     return 'warning-row';
