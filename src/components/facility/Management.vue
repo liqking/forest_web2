@@ -96,6 +96,7 @@
                 gridData: [],   //出库信息
                 dialogTableVisible:false,
                 getIndex:"",
+                getRowData:[]
 
             }
         },
@@ -149,7 +150,7 @@
             },
             tableClick(row){    //表格点击得到行
                 this.getIndex = row.index;
-                // console.log(row);
+                this.getRowData = row;
             },
             tableStyle({rowIndex}){   //改变表格背景颜色
                 if ((this.getIndex) === rowIndex ) {
@@ -162,8 +163,21 @@
                 row.index = rowIndex;
             },
             queryDeliveryInfo(){    //查看出库信息
-                this.dialogTableVisible = true;
-                console.log(this.getIndex)  //选择第几行
+                // console.log( this.getIndex)  //选择第几行
+                if(typeof  this.getIndex == "string"){  //表示有选中行
+                    this.$message({
+                        showClose: true,
+                        message: '请选择查看信息！',
+                        type: 'error'
+                    });
+                }else{
+                   console.log(this.getRowData);    //选择行信息
+
+                    //根据 deliveryrecordId 查询出库信息
+
+
+                    this.dialogTableVisible = true;
+                }
             }
         },
         mounted() { //挂载后，初始化
