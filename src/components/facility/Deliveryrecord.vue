@@ -211,11 +211,17 @@
                         genre: this.ruleForm.genre,
                         type: this.ruleForm.type,
                         //分页
-                        
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize,
                     }
                 });
-               console.log(response.data);
-                this.tableData = this.filter(response.data);
+                console.log(response)
+                this.currentPage = response.data.pageNum;
+                this.pageSize = response.data.pageSize;
+                this.totalPage = response.data.total;
+                this.tableData = this.filter(response.data.list);
+
+
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
@@ -238,7 +244,8 @@
                         });
                         if (response.data > 0) {
                             this.tableInfo(this.currentPage,this.pageSize);
-                            this.success()
+                            this.success();
+                            this.dialogFormVisible = false;
                         } else {
                             this.error();
                         }
@@ -247,7 +254,6 @@
                         return false;
                     }
                 });
-                this.dialogFormVisible = false;
             },
             error() {
                 this.$message({
@@ -262,6 +268,11 @@
                     message: '添加成功',
                     type: 'success'
                 });
+                this.from.name ="";
+                this.from.genre ="";
+                this.from.type ="";
+                this.from.textarea ="";
+                this.from.num ="";
             },
             filter(arr){
                 for (let i = 0; i < arr.length; i++) {

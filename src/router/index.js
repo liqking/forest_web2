@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import HomeDefault from '../components/HomeDefault'
 import home from '../components/Home'
 import Deliveryrecord from  '../components/facility/Deliveryrecord'
+import Management from '../components/facility/Management'
 import Login from "../components/Login";
 import Experts from "../components/Experts";
 
@@ -18,7 +19,9 @@ const routes = [
         children:[
             //默认页面
             {path:'',component: HomeDefault},
-            {path:'Deliveryrecord',component:Deliveryrecord},
+            //药剂页面
+            {path:'/Deliveryrecord',component:Deliveryrecord},
+            {path:'/Management',component:Management},
             //专家页面
             {path:'/Experts',component:Experts}
         ],

@@ -30,7 +30,7 @@
                         <el-submenu index="4-1">
                             <template slot="title"><i class="el-icon-folder"></i>药剂机械出库管理</template>
                             <el-menu-item index="/Deliveryrecord"><i class="el-icon-document-copy"></i>药剂管理</el-menu-item>
-                            <el-menu-item index="4-1-2"><i class="el-icon-document-copy"></i>出库管理</el-menu-item>
+                            <el-menu-item index="/Management"><i class="el-icon-document-copy"></i>出库管理</el-menu-item>
                         </el-submenu>
                         <el-submenu index="5-1">
                             <template slot="title"><i class="el-icon-folder"></i>系统信息</template>
