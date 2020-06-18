@@ -10,7 +10,9 @@ import Login from "../components/Login";
 import Experts from "../components/Experts";
 import Area from "../components/Area";
 import Classes from "../components/Classes";
-import Event from "../components/Event"
+import Event from "../components/Event";
+import Pest from "../components/Pest";
+import User from "../components/User"
 
 Vue.use(VueRouter)
 
@@ -31,6 +33,10 @@ const routes = [
             {path:'/Area',component:Area},
             {path:'/Classes',component:Classes},
             {path:'/Event',component:Event},
+            //资料管理页面
+            {path: '/Pest', component: Pest},
+            //用户管理
+            {path: '/user', component: User}
         ],
     },
     {

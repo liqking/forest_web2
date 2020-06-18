@@ -72,7 +72,7 @@
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="classesBeans"
+                        prop="classesBeans[0].name"
                         label="负责小班"
                         width="180">
                 </el-table-column>
@@ -143,6 +143,20 @@ import axios from 'axios';
                     method: 'get',
                 })
                 this.tableData = response.data;
+                this.tableData.forEach(element => {
+                    if(element.type == 1){
+                        element.type = "林地"
+                    }
+                    if(element.type == 2){
+                        element.type = "疏林地"
+                    }
+                    if(element.type == 3){
+                        element.type = "灌木林"
+                    }
+                    if(element.type == 4){
+                        element.type = "苗圃地"
+                    }
+                });
                 console.log(response.data);
             },
             async submitForm() {    //查询

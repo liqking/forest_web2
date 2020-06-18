@@ -80,8 +80,6 @@
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                     </el-form-item>
-                    
-
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -93,29 +91,29 @@
         <template style="margin-left: 30px">
             <el-table
                     :data="tableData"
-                    style="width: 100%;height: 400px">
+                    style="width: 100%">
                 <el-table-column
                         prop="name"
                         label="事件名称"
                         width="150">
                 </el-table-column>
                 <el-table-column
-                        prop="genre"
+                        prop="date"
                         label="日期"
                         width="150">
                 </el-table-column>
                 <el-table-column
-                        prop="type"
+                        prop="areaBean.name"
                         label="发生位置"
                         width="150">
                 </el-table-column>
                 <el-table-column
-                        prop="purpose"
+                        prop="describe"
                         label="防治方案"
                         width="150">
                 </el-table-column>
                 <el-table-column
-                        prop="purpose"
+                        prop="state"
                         label="灾情状态"
                         width="150">
                 </el-table-column>
@@ -123,11 +121,16 @@
                         prop="purpose"
                         label="操作"
                         width="180">
+                        <template slot-scope="scope">
+                            <el-button @click="show(scope.row)" type="text">查看</el-button>
+                            <el-button @click="update(scope.row)" type="text">编辑</el-button>
+                            <el-button @click="update(scope.row)" type="text">申请会商</el-button>
+                        </template>
                 </el-table-column>
             </el-table>
         </template>
 
-        <div class="block">
+        <!-- <div class="block">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -137,7 +140,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total=totalPage>
             </el-pagination>
-        </div>
+        </div> -->
 
 
     </div>
@@ -158,25 +161,60 @@ import axios from 'axios';
                     name:'',
                     tree:'',
                     goodTree:'',
-                    type:''
+                    type:'',
+                    imageUrl:''
                 },
                 dialogFormVisible:false,
                 formLabelWidth: '120px',
                 tableData:[],
             }
         },
+        mounted: function() {
+            this.tableInfo();
+        },
         methods:{
+            async tableInfo() {
+                let response = await axios({
+                    url: '/forest_sys/getAllEvent',
+                    method: 'get',
+                })
+                this.tableData = response.data;
+                this.tableData.forEach(element => {
+                    if(element.state == 1){
+                        element.state = "已经得到控制"
+                    }
+                    if(element.state == 2){
+                        element.state = "防治中"
+                    }
+                    if(element.state == 3){
+                        element.state = "无法解决，申请专家会商"
+                    }
+                });
+                console.log(response.data);
+            },
             async submitForm() {    //查询
                 let response = await axios({
-                    url: '/forest_sys/getAreaItem',
+                    url: '/forest_sys/getEventItem',
                     method: 'get',
                     params: {
                         name: this.ruleForm.name,
-                        tree: this.ruleForm.tree,
-                        classes: this.ruleForm.tree,
+                        state: this.ruleForm.state,
+                        areaName: this.ruleForm.areaName,
                     }
                 });
-                console.log(response)
+                this.tableData = response.data;
+                this.tableData.forEach(element => {
+                    if(element.state == 1){
+                        element.state = "已经得到控制"
+                    }
+                    if(element.state == 2){
+                        element.state = "防治中"
+                    }
+                    if(element.state == 3){
+                        element.state = "无法解决，申请专家会商"
+                    }
+                });
+                console.log(response.data);
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();

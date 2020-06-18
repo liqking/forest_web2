@@ -31,11 +31,8 @@
                         <el-input v-model="form.num" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="负责区域" prop="classes" :label-width="formLabelWidth" style="width: 340px">
-                        <el-select v-model="form.classes">
-                            <el-option label="林地" value="1"></el-option>
-                            <el-option label="疏木林" value="2"></el-option>
-                            <el-option label="灌木林" value="3"></el-option>
-                            <el-option label="苗圃地" value="4"></el-option>
+                        <el-select v-model="form.areaId">
+                            <el-option v-for="item in areas" :key="item.areaId" :label="item.name" :value="item.areaId"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -74,10 +71,13 @@
                         prop="purpose"
                         label="操作"
                         width="180">
+                        <template slot-scope="scope">
+                            <el-button @click="show(scope.row)" type="text">查看</el-button>
+                            <el-button @click="update(scope.row)" type="text">编辑</el-button>
+                        </template>
                 </el-table-column>
             </el-table>
         </template>
-
         <!-- <div class="block">
             <el-pagination
                     @size-change="handleSizeChange"
@@ -89,6 +89,11 @@
                     :total=totalPage>
             </el-pagination>
         </div> -->
+
+        <!-- 查看小班详情 -->
+        
+        <!-- 修改小班 -->
+        
     </div>
 </template>
 <script>
@@ -106,8 +111,9 @@ import axios from "axios";
                     person:'',
                     phone:'',
                     num:'',
-                    classes:''
+                    areaId:''
                 },
+                areas:"",
                 dialogFormVisible:false,
                 formLabelWidth: '120px',
                 tableData:[],
@@ -115,8 +121,31 @@ import axios from "axios";
         },
         mounted: function() {
             this.tableInfo();
+            this.getArea();
         },
         methods:{
+            add(){
+                axios({
+                    url: '/forest_sys/addClasses',
+                    method: 'get',
+                    params: {
+                        name:this.form.name,
+                        person:this.form.person,
+                        phone:this.form.phone,
+                        num:this.form.num,
+                        areaId:this.form.areaId
+                    }
+                })
+                this.dialogFormVisible = false
+            }, 
+            async getArea(){
+                let response = await axios({
+                    method: "get",
+                    url: "/forest_sys/getAllArea",
+                });
+                this.areas = response.data;
+                console.log(this.areas);
+            },
             // 初始化表格
             async tableInfo() {
                 let response = await axios({
@@ -128,15 +157,15 @@ import axios from "axios";
             },
             async submitForm() {    //查询
                 let response = await axios({
-                    url: '/forest_sys/getAreaItem',
+                    url: '/forest_sys/getClassesItem',
                     method: 'get',
                     params: {
                         name: this.ruleForm.name,
-                        tree: this.ruleForm.tree,
-                        
+                        area: this.ruleForm.areaName,
                     }
                 });
-                console.log(response)
+                console.log(response);
+                this.tableData =  response.data;
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
