@@ -64,10 +64,10 @@
                 xt: "display: none",
                 zq: "display: none",
                 kf: "display: none",
-                zj:"display: none"
+                zj:"display: none",
+                usergrade:''
             }
         },
-
         name: "home",
         async beforeRouteEnter (to, from, next) {
 
@@ -75,10 +75,14 @@
                 url: '/forest_sys/getsession',
                 method: 'get'
             });
-            console.log(response)
+            // console.log(response.data)
+            // this.usergrade = response.data.usergrade
+            // console.log(this.usergrade)
             if(response.data){
                 next(vm=>{
-                    vm.user = response.data.name
+                    console.log(this.usergrade+"aa "+vm)
+
+                    this.usergrade = response.data.usergrade
                 })
             }else {
                 next('/login')
@@ -99,8 +103,9 @@
         },
         mounted: function () {
 
-            let usergrade = this.$store.state.usergrade;
+            let usergrade = "超级管理员";
             console.log(usergrade)
+            console.log("aaa")
 
             if (usergrade === "资料管理员") {
                 this.zl = "display: block"
