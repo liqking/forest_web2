@@ -13,6 +13,7 @@ import Classes from "../components/Classes";
 import Event from "../components/Event";
 import Pest from "../components/Pest";
 import User from "../components/User"
+import ExpertsTalks from '../components/ExpertsTalks'
 
 Vue.use(VueRouter)
 
@@ -36,7 +37,9 @@ const routes = [
             //资料管理页面
             {path: '/Pest', component: Pest},
             //用户管理
-            {path: '/user', component: User}
+            {path: '/user', component: User},
+            //专家需要会商的页面
+            {path:'/ExpertsTalks',component:ExpertsTalks}
         ],
     },
     {

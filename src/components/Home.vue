@@ -25,7 +25,7 @@
                         <el-submenu index="3-1" :style="zj">
                             <template slot="title"><i class="el-icon-folder"></i>专家会商</template>
                             <el-menu-item index="/Experts"><i class="el-icon-document-copy"></i>专家一览</el-menu-item>
-                            <el-menu-item index="3-1-2"><i class="el-icon-document-copy"></i>会商灾情</el-menu-item>
+                            <el-menu-item index="/ExpertsTalks"><i class="el-icon-document-copy"></i>会商灾情</el-menu-item>
                         </el-submenu>
                         <el-submenu index="4-1" :style="kf">
                             <template slot="title"><i class="el-icon-folder"></i>药剂机械出库管理</template>

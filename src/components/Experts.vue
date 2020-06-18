@@ -12,7 +12,7 @@
                 <el-input v-model="ruleForm.work" style="width: 120px"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="success" plain @click="submitForm()">查询</el-button>
+                <el-button type="success" plain @click="submitForm('ruleForm')">查询</el-button>
                 <el-button type="info" plain @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
@@ -85,12 +85,12 @@
     import axios from "axios";
     export default {
         computed: {
-            ...mapState('Experts', ["expertspage"])
+            ...mapState('Experts', ["expertspage","open"])
         },
         name: "Experts",
         data() {
             return {
-                tableData: [{}],
+             //   tableData: [{}],
                 ruleForm: {
                     name: '',
                     specialties: '',
@@ -100,7 +100,7 @@
             }
         },
         created(){
-            this.setExperts({currentpage:1,pagesize:4});
+            this.setExperts({currentpage:1,pagesize:4,name:this.ruleForm.name,specialties:this.ruleForm.specialties,work:this.ruleForm.work});
         },
         methods: {
             ...mapActions('Experts',["setExperts"]),
@@ -118,6 +118,13 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         alert('submit!');
+                        this.setExperts({
+                            currentpage:1
+                            ,pagesize:this.size,
+                            name:this.ruleForm.name,
+                            specialties:this.ruleForm.specialties,
+                            work:this.ruleForm.work
+                        });
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -149,11 +156,21 @@
             },
             handleSizeChange(val) {
                 this.size=val;
-                this.setExperts({currentpage:1,pagesize:val});
+                this.setExperts({currentpage:1,
+                    pagesize:val,
+                    name:this.ruleForm.name,
+                    specialties:this.ruleForm.specialties,
+                    work:this.ruleForm.work
+                });
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {
-                this.setExperts({currentpage:val,pagesize:this.size});
+                this.setExperts({currentpage:val
+                    ,pagesize:this.size,
+                    name:this.ruleForm.name,
+                    specialties:this.ruleForm.specialties,
+                    work:this.ruleForm.work
+                });
                 console.log(`当前页: ${val}`);
             }
         }
