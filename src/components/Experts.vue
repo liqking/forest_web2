@@ -19,10 +19,7 @@
                         prop="address"
                         label="地址">
                 </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="地址">
-                </el-table-column>
+
             </el-table>
         </template>
     </div>
