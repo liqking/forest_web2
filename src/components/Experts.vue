@@ -35,6 +35,7 @@
         },
         methods: {
             tableRowClassName({row, rowIndex}) {
+                console.log(row);
                 if (rowIndex === 1) {
                     return 'warning-row';
                 } else if (rowIndex === 3) {
