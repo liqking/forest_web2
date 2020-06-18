@@ -19,7 +19,7 @@ const routes = [
             //默认页面
             {path:'',component: HomeDefault},
             {path:'Deliveryrecord',component:Deliveryrecord},
-            {path:"login",component:Login}
+            {path:"login",component:Login},
 
             {path:'Deliveryrecord',component:Deliveryrecord},
             {path:'',component: HomeDefault},
