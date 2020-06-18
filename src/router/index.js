@@ -8,7 +8,9 @@ import Deliveryrecord from  '../components/facility/Deliveryrecord'
 import Management from '../components/facility/Management'
 import Login from "../components/Login";
 import Experts from "../components/Experts";
-import Pest from "../components/Pest"
+import Area from "../components/Area";
+import Classes from "../components/Classes";
+import Event from "../components/Event"
 
 Vue.use(VueRouter)
 
@@ -25,9 +27,10 @@ const routes = [
             {path:'/Management',component:Management },
             //专家页面
             {path:'/Experts',component:Experts},
-            //资料管理页面
-            {path:'/Pest',component:Pest}
-
+            //灾情防治
+            {path:'/Area',component:Area},
+            {path:'/Classes',component:Classes},
+            {path:'/Event',component:Event},
         ],
     },
     {
@@ -40,5 +43,10 @@ const router = new VueRouter({
     mode: 'history',
     routes
 })
+
+const originalPush = VueRouter.prototype.push
+    VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+}
 
 export default router

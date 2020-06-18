@@ -18,9 +18,9 @@
                         </el-submenu>
                         <el-submenu index="2-1">
                             <template slot="title"><i class="el-icon-folder"></i>灾情防治</template>
-                            <el-menu-item index="2-1-1"><i class="el-icon-document-copy"></i>区域一览</el-menu-item>
-                            <el-menu-item index="2-1-2"><i class="el-icon-document-copy"></i>小班管理</el-menu-item>
-                            <el-menu-item index="2-1-2"><i class="el-icon-document-copy"></i>事件记录</el-menu-item>
+                            <el-menu-item index="/Area"><i class="el-icon-document-copy"></i>区域一览</el-menu-item>
+                            <el-menu-item index="/Classes"><i class="el-icon-document-copy"></i>小班管理</el-menu-item>
+                            <el-menu-item index="/Event"><i class="el-icon-document-copy"></i>事件记录</el-menu-item>
                         </el-submenu>
                         <el-submenu index="3-1">
                             <template slot="title"><i class="el-icon-folder"></i>专家会商</template>
