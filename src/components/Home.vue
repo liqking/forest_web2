@@ -35,7 +35,7 @@
                         </el-submenu>
                         <el-submenu index="5-1" :style="xt" >
                             <template slot="title"><i class="el-icon-folder"></i>系统信息</template>
-                            <el-menu-item index="5-1-1"><i class="el-icon-document-copy"></i>用户管理</el-menu-item>
+                            <el-menu-item index="/user"><i class="el-icon-document-copy"></i>用户管理</el-menu-item>
                             <el-menu-item index="5-1-2"><i class="el-icon-document-copy"></i>日志一览</el-menu-item>
                         </el-submenu>
                     </el-submenu>
@@ -69,23 +69,22 @@
         },
 
         name: "home",
-        //有用不要删
-        // async beforeRouteEnter (to, from, next) {
-        //
-        //     let response = await axios({
-        //         url: '/forest_sys/getsession',
-        //         method: 'get'
-        //     });
-        //     console.log(response)
-        //     if(response.data){
-        //         next(vm=>{
-        //             vm.user = response.data.name
-        //         })
-        //     }else {
-        //         next('/login')
-        //     }
-        //
-        // },
+        async beforeRouteEnter (to, from, next) {
+
+            let response = await axios({
+                url: '/forest_sys/getsession',
+                method: 'get'
+            });
+            console.log(response)
+            if(response.data){
+                next(vm=>{
+                    vm.user = response.data.name
+                })
+            }else {
+                next('/login')
+            }
+
+        },
 
         methods: {
             async removesession() {
