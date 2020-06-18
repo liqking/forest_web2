@@ -8,7 +8,8 @@ export default new Vuex.Store({
 
   state: {
     username:'',
-    usergrade:''
+    usergrade:''  
+
   },
   mutations: {
     // updateCoursePage(state,name,grade) {
