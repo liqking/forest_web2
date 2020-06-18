@@ -18,30 +18,29 @@
         </el-form>
         <template>
             <el-table
-                    :data="expertspage.list"
+                    :data="tableData"
                     style="width: 100%"
                     :row-class-name="tableRowClassName">
                 <el-table-column
-                        prop="expertsName"
+                        prop="date"
                         label="姓名"
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="work"
+                        prop="name"
                         label="工作单位"
                         width="240">
                 </el-table-column>
                 <el-table-column
-                        prop="specialties"
+                        prop="address"
                         label="专长">
                 </el-table-column>
                 <el-table-column
-                        prop="duty"
+                        prop="address"
                         label="职务">
                 </el-table-column>
                 <el-table-column
-                        width="200"
-                        prop="telephone"
+                        prop="address"
                         label="电话">
                 </el-table-column>
 
@@ -70,9 +69,9 @@
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :page-sizes="[2,4,6]"
-                        :page-size="size"
+                        :page-size="4"
                         layout="total, prev, pager, next,sizes"
-                        :total="expertspage.total">
+                        :total="10">
                 </el-pagination>
             </div>
         </template>
@@ -80,12 +79,12 @@
 </template>
 
 <script>
-    import {mapState,mapActions} from 'vuex';
+    import {mapState} from 'vuex';
     import qs from "qs";
     import axios from "axios";
     export default {
         computed: {
-            ...mapState('Experts', ["expertspage"])
+            ...mapState('Experts', ["open"])
         },
         name: "Experts",
         data() {
@@ -96,14 +95,10 @@
                     specialties: '',
                     work: '',
                 },
-                size:4
+                currentPage1: 5,
             }
         },
-        created(){
-            this.setExperts({currentpage:1,pagesize:4});
-        },
         methods: {
-            ...mapActions('Experts',["setExperts"]),
             tableRowClassName({row, rowIndex}) {
                 console.log(this.open)
                 console.log(row);
@@ -127,7 +122,7 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-             handleEdit(index, row) {
+            handleEdit(index, row) {
 
                 console.log(row,index)
 
@@ -148,12 +143,9 @@
 
             },
             handleSizeChange(val) {
-                this.size=val;
-                this.setExperts({currentpage:1,pagesize:val});
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {
-                this.setExperts({currentpage:val,pagesize:this.size});
                 console.log(`当前页: ${val}`);
             }
         }

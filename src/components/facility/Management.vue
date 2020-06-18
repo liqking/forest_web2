@@ -20,53 +20,30 @@
             <el-button type="success" icon="el-icon-edit" @click="query()">查询</el-button>
         </el-form>
 
-        <!--添加药剂/器械-->
-        <!--<div id="add" style="margin-left: 30px">-->
-            <!--<el-button type="success" icon="el-icon-edit" @click="dialogFormVisible = true">添加出库信息</el-button>-->
-            <!--<el-button type="success" icon="el-icon-edit" @click="dialogFormVisible = true">查看出库信息</el-button>-->
+        <!--查看出库信息-->
+        <el-button type="success" icon="el-icon-edit" @click="queryDeliveryInfo()">查看出库信息</el-button>
+        <el-dialog title="查看出库信息" :visible.sync="dialogTableVisible" style="text-align: center">
+            <div style="margin-bottom: 50px">
+                <p class="titleSub">领用小班：<label></label></p>
+                <p class="titleSub">出库人：<label></label></p>
+                <p class="titleSub">领用日期：<label></label></p>
+            </div>
 
-            <!--<el-dialog title="添加药剂/器械" :visible.sync="dialogFormVisible">-->
-                <!--<el-form :model="form" :rules="rules" ref="form">-->
-                    <!--<el-form-item label="名称" prop="name" :label-width="formLabelWidth" style="width: 340px">-->
-                        <!--<el-input v-model="form.name" autocomplete="off"></el-input>-->
-                    <!--</el-form-item>-->
-                    <!--<el-form-item label="防治类型" prop="genre" :label-width="formLabelWidth">-->
-                        <!--<el-select v-model="form.genre">-->
-                            <!--<el-option label="鼠害" value="1"></el-option>-->
-                            <!--<el-option label="虫害" value="2"></el-option>-->
-                            <!--<el-option label="病害" value="3"></el-option>-->
-                        <!--</el-select>-->
-                    <!--</el-form-item>-->
-                    <!--<el-form-item label="类别" prop="type" :label-width="formLabelWidth">-->
-                        <!--<el-select v-model="form.type">-->
-                            <!--<el-option label="药剂" value="1"></el-option>-->
-                            <!--<el-option label="器械" value="2"></el-option>-->
-                        <!--</el-select>-->
-                    <!--</el-form-item>-->
-                    <!--<el-form-item label="数量" prop="num" :label-width="formLabelWidth" style="width: 340px">-->
-                        <!--<el-input v-model="form.num" autocomplete="off"></el-input>-->
-                    <!--</el-form-item>-->
-                    <!--<el-form-item label="主要用途" prop="textarea" :label-width="formLabelWidth">-->
-                        <!--<el-input-->
-                                <!--type="textarea"-->
-                                <!--:rows="5"-->
-                                <!--placeholder="请输入内容"-->
-                                <!--v-model="form.textarea" style="width: 350px">-->
-                        <!--</el-input>-->
-                    <!--</el-form-item>-->
-
-                <!--</el-form>-->
-                <!--<div slot="footer" class="dialog-footer">-->
-                    <!--<el-button @click="dialogFormVisible = false">取 消</el-button>-->
-                    <!--<el-button type="primary" @click="add('form')">确 定</el-button>-->
-                <!--</div>-->
-            <!--</el-dialog>-->
-        <!--</div>-->
+            <el-table :data="gridData">
+                <el-table-column property="date" label="物品名称" width="150"></el-table-column>
+                <el-table-column property="name" label="类型" width="150"></el-table-column>
+                <el-table-column property="date" label="防治类型" width="150"></el-table-column>
+                <el-table-column property="name" label="领用数量" width="150"></el-table-column>
+            </el-table>
+        </el-dialog>
 
         <!--初始化-->
         <template>
             <el-table
                     :data="tableData"
+                    @row-click="tableClick"
+                    :cell-style="tableStyle"
+                    :row-class-name="tableRowClassName"
                     style="width: 800px;height: 357px;left: 50px">
                 <el-table-column
                         prop="date"
@@ -116,6 +93,9 @@
                 pageSize :3,
                 totalPage :0,
                 dialogFormVisible:false,
+                gridData: [],   //出库信息
+                dialogTableVisible:false,
+                getIndex:"",
 
             }
         },
@@ -166,6 +146,24 @@
                 this.pageSize = response.data.pageSize;
                 this.totalPage= response.data.total
 
+            },
+            tableClick(row){    //表格点击得到行
+                this.getIndex = row.index;
+                // console.log(row);
+            },
+            tableStyle({rowIndex}){   //改变表格背景颜色
+                if ((this.getIndex) === rowIndex ) {
+                    return {
+                        "background-color": "#aabda3"
+                    };
+                }
+            },
+            tableRowClassName ({row, rowIndex}) {
+                row.index = rowIndex;
+            },
+            queryDeliveryInfo(){    //查看出库信息
+                this.dialogTableVisible = true;
+                console.log(this.getIndex)  //选择第几行
             }
         },
         mounted() { //挂载后，初始化
@@ -179,6 +177,10 @@
         font-size: 28px;
         text-align: center;
         margin-bottom: 25px;
+    }
+    .titleSub{
+        margin-right: 150px;
+        display: inline;
     }
 
 </style>
