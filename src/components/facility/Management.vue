@@ -21,7 +21,7 @@
         </el-form>
 
         <!--查看出库信息-->
-        <el-button type="success" icon="el-icon-edit" @click="dialogTableVisible = true">查看出库信息</el-button>
+        <el-button type="success" icon="el-icon-edit" @click="queryDeliveryInfo()">查看出库信息</el-button>
         <el-dialog title="查看出库信息" :visible.sync="dialogTableVisible" style="text-align: center">
             <div style="margin-bottom: 50px">
                 <p class="titleSub">领用小班：<label></label></p>
@@ -41,6 +41,9 @@
         <template>
             <el-table
                     :data="tableData"
+                    @row-click="tableClick"
+                    :cell-style="tableStyle"
+                    :row-class-name="tableRowClassName"
                     style="width: 800px;height: 357px;left: 50px">
                 <el-table-column
                         prop="date"
@@ -91,7 +94,8 @@
                 totalPage :0,
                 dialogFormVisible:false,
                 gridData: [],   //出库信息
-                dialogTableVisible:false
+                dialogTableVisible:false,
+                getIndex:"",
 
             }
         },
@@ -142,6 +146,24 @@
                 this.pageSize = response.data.pageSize;
                 this.totalPage= response.data.total
 
+            },
+            tableClick(row){    //表格点击得到行
+                this.getIndex = row.index;
+                // console.log(row);
+            },
+            tableStyle({rowIndex}){   //改变表格背景颜色
+                if ((this.getIndex) === rowIndex ) {
+                    return {
+                        "background-color": "#aabda3"
+                    };
+                }
+            },
+            tableRowClassName ({row, rowIndex}) {
+                row.index = rowIndex;
+            },
+            queryDeliveryInfo(){    //查看出库信息
+                this.dialogTableVisible = true;
+                console.log(this.getIndex)  //选择第几行
             }
         },
         mounted() { //挂载后，初始化
