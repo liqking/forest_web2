@@ -22,7 +22,8 @@ const routes = [
             {path:'',component: HomeDefault},
             //药剂页面
             {path:'/Deliveryrecord',component:Deliveryrecord},
-            {path:'/Management',component:Management },
+            {path:'/Management',component:Management},
+
             //专家页面
             {path:'/Experts',component:Experts},
             //资料管理页面
