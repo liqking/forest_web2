@@ -94,7 +94,7 @@
     };
 </script>
 
-<style>
+<style scoped>
 
     .box-card {
         margin: 50px 300px;
