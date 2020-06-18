@@ -9,7 +9,6 @@ import Deliveryrecord from  '../components/facility/Deliveryrecord'
 Vue.use(VueRouter)
 
 const routes = [
-
     {
         path:'/',
         component:home,
