@@ -54,10 +54,35 @@
 </template>
 
 <script>
+    import axios from "axios";
     export default {
-        name: "home",
-        methods:{
 
+        name: "home",
+        async beforeRouteEnter (to, from, next) {
+
+            let response = await axios({
+                url: '/forest_sys/getsession',
+                method: 'get'
+            });
+            console.log(response)
+            if(response.data){
+                next(vm=>{
+                    vm.user = response.data.name
+                })
+            }else {
+                next('/login')
+            }
+
+        },
+        methods:{
+            async removesession(){
+
+                await axios({
+                    url: '/forest_sys/resession',
+                    method: 'get'
+                });
+                this.$router.push('/login')
+            }
         }
     }
 </script>
