@@ -170,6 +170,20 @@ import axios from 'axios';
                     }
                 });
                 this.tableData = response.data
+                this.tableData.forEach(element => {
+                    if(element.type == 1){
+                        element.type = "林地"
+                    }
+                    if(element.type == 2){
+                        element.type = "疏林地"
+                    }
+                    if(element.type == 3){
+                        element.type = "灌木林"
+                    }
+                    if(element.type == 4){
+                        element.type = "苗圃地"
+                    }
+                });
                 console.log(response)
             },
             resetForm(formName) {
