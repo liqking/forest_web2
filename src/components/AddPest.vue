@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog title="添加新虫害" :visible.sync="setAddPestVis" width="50%" :before-close="dialogclose">
+        <el-dialog title="添加新虫害" :visible.sync="vis" width="50%" :before-close="dialogclose">
             <el-form ref="form" :model="form" label-width="80px" :inline="true">
                 <el-form-item label="害虫名">
                     <el-input v-model="form.name" placeholder="请输入内容"></el-input>
@@ -38,10 +38,11 @@
 
     export default {
         name: "AddPest",
-
+        props:["vis"],
         data() {
             return {
                 // dialogVisible:false,
+
                 form: {
                     name: '',
                     host: '',

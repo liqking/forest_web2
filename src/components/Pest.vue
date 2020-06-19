@@ -43,14 +43,13 @@
                 :total="total"
         ></el-pagination>
 
-        <AddPest></AddPest>
+        <AddPest :vis="setAdd"></AddPest>
 
     </div>
 </template>
 
 <script>
     import AddPest from './AddPest.vue'
-
     import axios from 'axios'
     // import qs from 'qs'
 
@@ -72,6 +71,9 @@
             };
         },
         methods: {
+            setAdd(){
+                    return false
+            },
             async showPestData() {
                 let response = await axios({
                     headers: {
