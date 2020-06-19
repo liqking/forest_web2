@@ -33,6 +33,8 @@
 
 <script>
     import {mapState, mapMutations} from 'vuex'
+    import axios from 'axios'
+    import qs from "qs";
 
     export default {
         name: "AddPest",
@@ -41,10 +43,10 @@
             return {
                 // dialogVisible:false,
                 form: {
-                    name:'',
-                    host:'',
+                    name: '',
+                    host: '',
                     breed: '',
-                    enemy:'',
+                    enemy: '',
                     measure: '',
                     harm: ''
                 },
@@ -66,12 +68,38 @@
             ...mapState('Pest', ['setAddPestVis'])
         },
         methods: {
-            ...mapMutations("Pest", ["setVis"]),
+            ...mapMutations("Pest", ["setVis","showPestData"]),
             dialogclose() {
                 this.setVis(false)
             },
-            onSubmit(){
-                console.log("onsubmit!")
+            async onSubmit() {
+
+                let response = await axios({
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    method: "post",
+                    url: '/forest_sys/addPest',
+                    data: qs.stringify({
+                        pestName: this.form.name,
+                        pestHost: this.form.host,
+                        pestBreed: this.form.breed,
+                        pestEnemy: this.form.enemy,
+                        pestMeasure: this.form.measure,
+                        pestHarm: this.form.harm
+                    })
+                });
+
+                if(response.data>0){
+                    this.$message({
+                        message: '添加成功',
+                        type: 'success'
+                    });
+                    this.dialogclose();
+                    this.showPestData();
+                }else{
+                    this.$message.error('添加失败！');
+                }
             }
         }
     }
