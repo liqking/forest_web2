@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import {mapState, mapMutations} from 'vuex'
+
     import axios from 'axios'
     import qs from "qs";
 
@@ -56,19 +56,7 @@
 
         },
 
-        computed: {
-            setAddPestVis: {
-                set(visible) {
-                    this.setVis(visible);
-                },
-                get() {
-                    return this.$store.state.setAddPestVis
-                }
-            },
-            ...mapState('Pest', ['setAddPestVis'])
-        },
         methods: {
-            ...mapMutations("Pest", ["setVis","showPestData"]),
             dialogclose() {
                 this.setVis(false)
             },

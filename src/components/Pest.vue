@@ -6,7 +6,7 @@
                 <el-input
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
-                        v-model="form.input1"
+                        v-model="form.condition1"
                         class="myinput"
                 ></el-input>
             </el-form-item>
@@ -14,12 +14,12 @@
                 <el-input
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
-                        v-model="form.input2"
+                        v-model="form.condition2"
                         class="myinput"
                 ></el-input>
             </el-form-item>
             <el-form-item class="myBtn" style="margin-left: 30px">
-                <el-button type="success" plain icon="el-icon-plus" @click="onSubmit">查询</el-button>
+                <el-button type="success" plain icon="el-icon-plus" @click="showPestData">查询</el-button>
             </el-form-item>
         </el-form>
 
@@ -36,23 +36,23 @@
         <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page.sync="curPage"
+                :current-page.sync="currentPage"
                 :page-sizes="[5, 15, 20, 25]"
-                :page-size="pSize"
+                :page-size="pageSize"
                 layout="sizes, prev, pager, next"
                 :total="total"
         ></el-pagination>
 
         <AddPest></AddPest>
 
-
     </div>
 </template>
 
 <script>
-    // import axios from 'axios'
     import AddPest from './AddPest.vue'
-    import {mapState,mapMutations} from 'vuex'
+
+    import axios from 'axios'
+    // import qs from 'qs'
 
     export default {
         components: {
@@ -60,76 +60,66 @@
         },
         data() {
             return {
-                pSize:this.pageSize,
-                // total: 0,
-                curPage: this.currentPage,
-                form: {
-                    input1: "",
-                    input2: ""
-                },
-                // tableData: [],
 
+                pestData: [],
+                pageSize: 5,
+                total: 0,
+                currentPage: 1,
+                form: {
+                    condition1: "",
+                    condition2: ""
+                },
             };
         },
-        computed:{
-            currentPage:{
-                set(curPage) {
-                    this.changeCurPage(curPage);
-                },
-                get() {
-                    return this.$store.state.currentPage
-                }
-            },
-            ...mapState("Pest",["pestData","pageSize","currentPage","total"])
-        },
         methods: {
-            handleAdd(){
+            async showPestData() {
+                let response = await axios({
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    url: '/forest_sys/searchPest',
+                    method: "post",
+                    // data: qs.stringify({
+                    //     curPage: this.currentPage,
+                    //     pageSize: this.pageSize,
+                    //     condition_name: this.form.condition1,
+                    //     condition_host: this.form.condition2
+                    // })
+                    params: {
+                        curPage: this.currentPage,
+                        pageSize: this.pageSize,
+                        condition_Name: this.form.condition1,
+                        condition_Host: this.form.condition2
+                    }
+                });
+                console.log(response.data)
+                this.currentPage = response.data.pageNum
+                this.total = response.data.total;
+                this.pageSize = response.data.pageSize;
+                this.pestData = response.data.list;
+                console.log(this.currentPage,
+                    this.pageSize,
+                    this.form.condition1,
+                    this.form.condition2)
+
+            },
+            handleAdd() {
                 this.setVis(true);
             },
-            ...mapMutations('Pest', ['setVis',"showPestData","changeCurPage","changePageSize"]),
-            // async showData() {
-            //
-            //     let response = await axios({
-            //         headers: {
-            //             "Content-Type": "application/x-www-form-urlencoded"
-            //         },
-            //         url: "/forest_sys/showPest",
-            //         method: "post",
-            //         params: {
-            //             curPage: this.currentPage,
-            //             pageSize: this.pageSize
-            //         }
-            //     });
-                // this.total = response.data.total
-                // this.pageSize = response.data.pageSize
-                // this.tableData = response.data.list
-                //   this.pages.isLastPage=response.data.isLastPage;
 
-            // },
-            onSubmit() {
-                console.log("submit!");
-            },
             handleSizeChange(val) {
-
-                this.changePageSize(val);
-                this.showPestData();
-                // this.pageSize = val;
-                // this.showData();
+                this.pageSize = val;
+                this.showPestData()
             },
             handleCurrentChange(val) {
 
-                this.changeCurPage(val);
+                this.currentPage = val
                 this.showPestData()
-                // this.currentPage = val;
-                // this.showData();
-            }
+            },
         },
-        mounted:function () {
+        mounted: function () {
             this.showPestData()
         }
-
-            // this.$on("showTable",this.showData())
-
 
     };
 </script>
