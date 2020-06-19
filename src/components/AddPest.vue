@@ -25,7 +25,7 @@
                 </el-form-item>
             </el-form>
             <el-button type="success" @click="onSubmit">确认</el-button>
-
+            <el-button type="success" @click="dialogclose">取消</el-button>
         </el-dialog>
 
     </div>

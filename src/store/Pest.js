@@ -5,7 +5,7 @@ export default {
     },
     mutations:{
         setVis(state,param){
-            console.log("dddddddddddd")
+
             state.setAddPestVis=param;
             console.log(state.setAddPestVis)
         }

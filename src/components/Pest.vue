@@ -77,7 +77,7 @@
             },
             ...mapMutations('Pest', ['setVis']),
             async showData() {
-                console.log("========发出请求");
+
                 let response = await axios({
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
@@ -93,7 +93,7 @@
                 this.pageSize = response.data.pageSize
                 this.tableData = response.data.list
                 //   this.pages.isLastPage=response.data.isLastPage;
-                console.log(response.data)
+
             },
             onSubmit() {
                 console.log("submit!");
