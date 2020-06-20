@@ -82,11 +82,11 @@
             },
             handleSizeChange(val) {
                 this.size=val;
-                this.setExperts({currentpage:1,pagesize:val});
+                this.setExpertsTalksPage({currentpage:1,pagesize:val});
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {
-                this.setExperts({currentpage:val,pagesize:this.size});
+                this.setExpertsTalksPage({currentpage:val,pagesize:this.size});
                 console.log(`当前页: ${val}`);
             }
         }

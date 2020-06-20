@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 export const  getExperts=async(currentpage,pagesize,name,specialties,work)=>{
     let response = await axios({
         url:'/forest_sys/showExperts',
@@ -21,6 +22,16 @@ export const getExpertsTalksPage=async (currentpage,pagesize)=>{
         params:{
             curentPage:currentpage,
             pageSize:pagesize
+        }
+    });
+    return  response.data;
+}
+export const getExp=async (id)=>{
+    let response = await axios({
+        url:'/forest_sys/look',
+        method:'get',
+        params:{
+            expertsId:id
         }
     });
     return  response.data;

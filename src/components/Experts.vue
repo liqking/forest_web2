@@ -12,10 +12,15 @@
                 <el-input v-model="ruleForm.work" style="width: 120px"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="success" plain @click="submitForm('ruleForm')">查询</el-button>
+                <el-button type="primary" icon="el-icon-search" plain @click="submitForm('ruleForm')">查询</el-button>
                 <el-button type="info" plain @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
+       <!-- //添加按钮-->
+        <div>
+            <el-button type="success" icon=" el-icon-plus" plain @click="openadds">添加专家</el-button>
+            <addExperts :openadd.sync="openadd"></addExperts>
+        </div>
         <template>
             <el-table
                     :data="expertspage.list"
@@ -24,20 +29,23 @@
                 <el-table-column
                         prop="expertsName"
                         label="姓名"
-                        width="180">
+                        width="120">
                 </el-table-column>
                 <el-table-column
                         prop="work"
                         label="工作单位"
-                        width="240">
+                        width="150">
                 </el-table-column>
                 <el-table-column
                         prop="specialties"
-                        label="专长">
+                        label="专长"
+                        width="110">
+
                 </el-table-column>
                 <el-table-column
                         prop="duty"
-                        label="职务">
+                        label="职务"
+                        width="110">
                 </el-table-column>
                 <el-table-column
                         width="200"
@@ -45,18 +53,26 @@
                         label="电话">
                 </el-table-column>
 
-                <el-table-column label="操作" width="240" >
+                <el-table-column label="操作"  >
                     <template slot-scope="scope">
                         <el-button
-                                type="text"
+                                type="primary"
                                 size="mini"
-                                @click="handleEdit(scope.$index, scope.row)">编辑
+                                icon="el-icon-share"
+                                @click="handleShow( scope.row)">详情
                         </el-button>
                         <el-button
-                                type="text"
+                                type="primary"
                                 size="mini"
-
-                                @click="handleDelete(scope.$index, scope.row)">删除
+                                icon="el-icon-edit"
+                                @click="handleEdit( scope.row)">编辑
+                        </el-button>
+                        <el-button
+                                type="danger"
+                                size="mini"
+                                icon="el-icon-delete"
+                                plain
+                                @click="handleDelete( scope.row)">删除
                         </el-button>
                     </template>
                 </el-table-column>
@@ -76,6 +92,8 @@
                 </el-pagination>
             </div>
         </template>
+        <updateExperts :openUpdate.sync="openUpdate"></updateExperts>
+        <showExperts :openShow.sync="openShow"></showExperts>
     </div>
 </template>
 
@@ -83,7 +101,15 @@
     import {mapState,mapActions} from 'vuex';
     import qs from "qs";
     import axios from "axios";
+    import addExperts from './ExpertsOperation/addExperts.vue'
+    import updateExperts from './ExpertsOperation/updateExperts.vue'
+    import showExperts from './ExpertsOperation/showExperts.vue'
     export default {
+        components:{
+            addExperts,
+            updateExperts,
+            showExperts
+        },
         computed: {
             ...mapState('Experts', ["expertspage","open"])
         },
@@ -91,6 +117,10 @@
         data() {
             return {
              //   tableData: [{}],
+                //控制添加组件是否显示
+                openadd:false,
+                openUpdate:false,
+                openShow:false,
                 ruleForm: {
                     name: '',
                     specialties: '',
@@ -103,7 +133,10 @@
             this.setExperts({currentpage:1,pagesize:4,name:this.ruleForm.name,specialties:this.ruleForm.specialties,work:this.ruleForm.work});
         },
         methods: {
-            ...mapActions('Experts',["setExperts"]),
+            ...mapActions('Experts',["setExperts","setExp","setshowExperts"]),
+            openadds(){
+                this.openadd=true;
+            },
             tableRowClassName({row, rowIndex}) {
                 console.log(this.open)
                 console.log(row);
@@ -134,13 +167,22 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-             handleEdit(index, row) {
+            handleShow( row){
+                //详情
+                this.setshowExperts(row.id);
+                this.openShow=true;
+                console.log(row)
+            },
+             handleEdit( row) {
+                this.setExp(row.id);
+                this.openUpdate=true;
 
-                console.log(row,index)
+                console.log(row.id +"===========")
 
             },
-            async handleDelete(index, row) {
-                console.log(index,row)
+            async handleDelete( row) {
+                //删除使用
+                console.log(row)
                 await axios({
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
