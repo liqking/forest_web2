@@ -221,8 +221,6 @@
                 this.pageSize = response.data.pageSize;
                 this.totalPage = response.data.total;
                 this.tableData = this.filter(response.data.list);
-
-
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
@@ -246,6 +244,7 @@
                         if (response.data > 0) {
                             this.tableInfo(this.currentPage,this.pageSize);
                             this.success();
+
                             this.dialogFormVisible = false;
                         } else {
                             this.error();
@@ -269,11 +268,11 @@
                     message: '添加成功',
                     type: 'success'
                 });
-                this.from.name ="";
-                this.from.genre ="";
-                this.from.type ="";
-                this.from.textarea ="";
-                this.from.num ="";
+                this.form.name ="";
+                this.form.genre ="";
+                this.form.type ="";
+                this.form.textarea ="";
+                this.form.num ="";
             },
             filter(arr){
                 for (let i = 0; i < arr.length; i++) {

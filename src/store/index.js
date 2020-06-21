@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Experts from './Experts'
+import Pest from './Pest'
+import dr from './Deliveryrecord'
 
 Vue.use(Vuex)
 
@@ -23,6 +25,6 @@ export default new Vuex.Store({
   },
   modules: {
     Experts,
-
+      Pest
   }
 })
