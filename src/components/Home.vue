@@ -75,14 +75,11 @@
                 url: '/forest_sys/getsession',
                 method: 'get'
             });
-            // console.log(response.data)
-            // this.usergrade = response.data.usergrade
-            // console.log(this.usergrade)
+
             if(response.data){
                 next(vm=>{
-                    console.log(this.usergrade+"aa "+vm)
-
-                    this.usergrade = response.data.usergrade
+                    vm.usergrade = response.data.usergrade
+                    console.log(response.data)
                 })
             }else {
                 next('/login')
@@ -98,31 +95,33 @@
                     method: 'get'
                 });
                 this.$router.push('/login')
+            },
+            user(){
+                if(this.$store.state.usergrade!=""){
+                    this.usergrade  = this.$store.state.usergrade;}
+                console.log(this.usergrade)
+                console.log("aaa")
+
+                if (this.usergrade === "资料管理员") {
+                    this.zl = "display: block"
+                } else if (this.usergrade === "灾情管理员") {
+                    this.zq = "display: block"
+                } else if (this.usergrade === "库房管理员") {
+                    this.kf = "display: block"
+                } else if (this.usergrade === "专家管理员") {
+                    this.zj = "display: block"
+                } else if (this.usergrade === "超级管理员") {
+                    this.xt = "display: block",
+                        this.zj = "display: block",
+                        this.kf = "display: block",
+                        this.zq = "display: block",
+                        this.zl = "display: block"
+                }
             }
 
         },
-        mounted: function () {
-
-            let usergrade = "超级管理员";
-            console.log(usergrade)
-            console.log("aaa")
-
-            if (usergrade === "资料管理员") {
-                this.zl = "display: block"
-            } else if (usergrade === "灾情管理员") {
-                this.zq = "display: block"
-            } else if (usergrade === "库房管理员") {
-                this.kf = "display: block"
-            } else if (usergrade === "专家管理员") {
-                this.zj = "display: block"
-            } else if (usergrade === "超级管理员") {
-                this.xt = "display: block",
-                this.zj = "display: block",
-                this.kf = "display: block",
-                this.zq = "display: block",
-                this.zl = "display: block"
-            }
-
+        created: function () {
+            this.user()
         }
     }
 </script>

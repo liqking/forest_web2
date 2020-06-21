@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Experts from './Experts'
-import Pest from './Pest'
 import dr from './Deliveryrecord'
 
 Vue.use(Vuex)
@@ -14,17 +13,20 @@ export default new Vuex.Store({
 
   },
   mutations: {
-    // updateCoursePage(state,name,grade) {
-    //   console.log(name);
-    //   console.log(grade);
-    //   state.username = name;
-    //   state.usergrade=grade;
-    // }
+
+    set_username: (state, username) => {
+      state.username = username
+      console.log( state.username)
+    },
+    set_usergrade: (state, usergrade) => {
+      state.usergrade = usergrade
+      console.log( state.usergrade)
+    }
   },
   actions: {
   },
   modules: {
     Experts,
-      Pest
+    dr
   }
 })

@@ -76,9 +76,9 @@
                         if (response.data) {
                             this.$alert("登录成功", "提示", {
                                 callback:()=>{
-                                    console.log(response.data.username+response.data.usergrade)
-                                    this.$store.state.username = response.data.username
-                                    this.$store.state.usergrade = response.data.usergrade
+                                    // console.log(response.data.username+response.data.usergrade)
+                                    this.$store.commit('set_username',response.data.username)
+                                    this.$store.commit('set_usergrade',response.data.usergrade)
                                     this.$router.push('/')
                                 }
                             });
