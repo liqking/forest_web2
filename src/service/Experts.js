@@ -36,3 +36,23 @@ export const getExp=async (id)=>{
     });
     return  response.data;
 }
+export const getEvent=async (id)=>{
+    let response = await axios({
+        url:'/forest_sys/talks',
+        method:'get',
+        params:{
+            eventId:id
+        }
+    });
+    return  response.data;
+}
+export const getExpertsList=async (disaster)=>{
+    let response = await axios({
+        url:'/forest_sys/disasterExperts',
+        method:'get',
+        params:{
+            disaster:disaster
+        }
+    });
+    return  response.data;
+}

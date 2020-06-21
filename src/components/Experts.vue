@@ -183,17 +183,41 @@
             async handleDelete( row) {
                 //删除使用
                 console.log(row)
-                await axios({
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    url: "",
-                    method: "post",
-                    data: qs.stringify({
+
+                //先确认
+                this.$confirm('此操作将删除该专家, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(async () => {
 
 
-                    })
+                    await axios({
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        url: "/forest_sys/deleteExperts",
+                        method: "post",
+                        data: qs.stringify({
+                            expertsId:row.id
+
+                        })
+                    }).then(
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        })
+                    )
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
                 });
+
+
+
 
             },
             handleSizeChange(val) {
