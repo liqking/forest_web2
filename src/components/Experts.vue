@@ -16,7 +16,7 @@
                 <el-button type="info" plain @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
-       <!-- //添加按钮-->
+        <!-- //添加按钮-->
         <div>
             <el-button type="success" icon=" el-icon-plus" plain @click="openadds">添加专家</el-button>
             <addExperts :openadd.sync="openadd"></addExperts>
@@ -53,7 +53,7 @@
                         label="电话">
                 </el-table-column>
 
-                <el-table-column label="操作"  >
+                <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button
                                 type="primary"
@@ -86,7 +86,7 @@
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :page-sizes="[2,4,6]"
-                        :page-size="size"
+                        :page-size="number"
                         layout="total, prev, pager, next,sizes"
                         :total="expertspage.total">
                 </el-pagination>
@@ -98,47 +98,55 @@
 </template>
 
 <script>
-    import {mapState,mapActions} from 'vuex';
+    import {mapState, mapMutations, mapActions} from 'vuex';
     import qs from "qs";
     import axios from "axios";
     import addExperts from './ExpertsOperation/addExperts.vue'
     import updateExperts from './ExpertsOperation/updateExperts.vue'
     import showExperts from './ExpertsOperation/showExperts.vue'
+
     export default {
-        components:{
+        components: {
             addExperts,
             updateExperts,
             showExperts
         },
         computed: {
-            ...mapState('Experts', ["expertspage","open"])
+            ...mapState('Experts', ["expertspage", "pageNumber", "number","search"])
         },
         name: "Experts",
         data() {
             return {
-             //   tableData: [{}],
+                //   tableData: [{}],
                 //控制添加组件是否显示
-                openadd:false,
-                openUpdate:false,
-                openShow:false,
+                openadd: false,
+                openUpdate: false,
+                openShow: false,
                 ruleForm: {
                     name: '',
                     specialties: '',
                     work: '',
                 },
-                size:4
+                size: 4
             }
         },
-        created(){
-            this.setExperts({currentpage:1,pagesize:4,name:this.ruleForm.name,specialties:this.ruleForm.specialties,work:this.ruleForm.work});
+        created() {
+            this.setExperts({
+                currentpage: 1,
+                pagesize: 4,
+                name: this.ruleForm.name,
+                specialties: this.ruleForm.specialties,
+                work: this.ruleForm.work
+            });
         },
         methods: {
-            ...mapActions('Experts',["setExperts","setExp","setshowExperts"]),
-            openadds(){
-                this.openadd=true;
+            ...mapMutations("Experts", ["setPageNumber", "setNumber", "setSearch"]),
+            ...mapActions('Experts', ["setExperts", "setExp", "setshowExperts"]),
+            openadds() {
+                this.openadd = true;
             },
             tableRowClassName({row, rowIndex}) {
-                console.log(this.open)
+
                 console.log(row);
                 if (rowIndex === 1) {
                     return 'warning-row';
@@ -151,13 +159,18 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         alert('submit!');
+
+                        this.setPageNumber(1);
+                        this.setNumber(4);
+
                         this.setExperts({
-                            currentpage:1
-                            ,pagesize:this.size,
-                            name:this.ruleForm.name,
-                            specialties:this.ruleForm.specialties,
-                            work:this.ruleForm.work
+                            currentpage: this.pageNumber
+                            , pagesize: this.number,
+                            name: this.ruleForm.name,
+                            specialties: this.ruleForm.specialties,
+                            work: this.ruleForm.work
                         });
+                        this.setSearch(this.ruleForm);
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -167,20 +180,20 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-            handleShow(row){
+            handleShow(row) {
                 //详情
                 this.setshowExperts(row.id);
-                this.openShow=true;
+                this.openShow = true;
                 console.log(row)
             },
-            handleEdit( row) {
+            handleEdit(row) {
                 this.setExp(row.id);
-                this.openUpdate=true;
+                this.openUpdate = true;
 
-                console.log(row.id +"===========")
+                console.log(row.id + "===========")
 
             },
-            async handleDelete( row) {
+            async handleDelete(row) {
                 //删除使用
                 console.log(row)
 
@@ -190,23 +203,34 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(async () => {
-
-
                     await axios({
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded"
-                        },
-                        url: "/forest_sys/deleteExperts",
-                        method: "post",
-                        data: qs.stringify({
-                            expertsId:row.id
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            url: "/forest_sys/deleteExperts",
+                            method: "post",
+                            data: qs.stringify({
+                                expertsId: row.id
 
+                            })
+                        }
+                    ).then(()=>{
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            })
+                        //删除后刷新
+                        this.setExperts({
+                            currentpage: this.pageNumber
+                            , pagesize: this.number,
+                            name: this.search.name,
+                            specialties: this.search.specialties,
+                            work: this.search.work
                         })
-                    }).then(
-                        this.$message({
-                            type: 'success',
-                            message: '删除成功!'
-                        })
+                    }
+
+
+
                     )
 
                 }).catch(() => {
@@ -221,21 +245,26 @@
 
             },
             handleSizeChange(val) {
-                this.size=val;
-                this.setExperts({currentpage:1,
-                    pagesize:val,
-                    name:this.ruleForm.name,
-                    specialties:this.ruleForm.specialties,
-                    work:this.ruleForm.work
+                this.setNumber(val);
+                this.setPageNumber(1);
+                this.setExperts({
+
+                    currentpage: this.pageNumber,
+                    pagesize: val,
+                    name: this.ruleForm.name,
+                    specialties: this.ruleForm.specialties,
+                    work: this.ruleForm.work
                 });
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {
-                this.setExperts({currentpage:val
-                    ,pagesize:this.size,
-                    name:this.ruleForm.name,
-                    specialties:this.ruleForm.specialties,
-                    work:this.ruleForm.work
+                this.setPageNumber(val);
+                this.setExperts({
+                    currentpage: val
+                    , pagesize: this.number,
+                    name: this.ruleForm.name,
+                    specialties: this.ruleForm.specialties,
+                    work: this.ruleForm.work
                 });
                 console.log(`当前页: ${val}`);
             }

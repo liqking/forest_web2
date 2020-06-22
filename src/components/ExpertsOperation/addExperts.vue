@@ -15,6 +15,7 @@
                             <el-date-picker
                                     v-model="form.date"
                                     type="date"
+                                    value-format="yyyy-MM-dd"
                                     placeholder="选择日期">
                             </el-date-picker>
                         </div>
@@ -76,9 +77,13 @@
 <script>
     import axios from 'axios'
     import qs from 'qs'
+    import {mapState,mapActions} from 'vuex';
     export default {
         name: "addExperts",
         props:["openadd"],
+        computed: {
+            ...mapState('Experts', ["pageNumber","number","search"])
+        },
         data() {
             return {
                 dialogFormVisible: false,
@@ -103,8 +108,12 @@
             };
         },
         methods: {
+            ...mapActions('Experts',["setExperts"]),
             async  add(experts){
+                console.log(this.form.date);
+                //添加
                 let response = await axios({
+
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
@@ -122,6 +131,15 @@
                         mailbox:experts.mailbox,
                         head:experts.head
                     })
+                });
+
+
+                this.setExperts({
+                    currentpage:this.pageNumber
+                    ,pagesize:this.number,
+                    name:this.search.name,
+                    specialties:this.search.specialties,
+                    work:this.search.work
                 });
                 console.log(response.data)
 

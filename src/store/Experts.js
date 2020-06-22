@@ -3,7 +3,14 @@ import {getExperts,getExpertsTalksPage,getExp,getEvent,getExpertsList} from '../
 export default {
     namespaced: true,
     state: {
-        open: true,
+        /*当前页数和当前条数*/
+        pageNumber:1,
+        number:4,
+        search:{
+            name: '',
+            specialties: '',
+            work: '',
+        },
         /*专家分页*/
         expertspage: [],
         /*专家要解决的事件分页*/
@@ -18,22 +25,22 @@ export default {
         expertsList:[]
     },
     mutations: {
-        setExperts(state, expertspage) {
+        setExperts1(state, expertspage) {
             state.expertspage = expertspage;
         },
         setExpertsTalks(state,expertsTalks){
             state.expertsTalks=expertsTalks;
         },
-        setExp(state,experts){
+        setExp1(state,experts){
             state.experts=experts;
         },
-        setshowExperts(state,showExperts){
+        setshowExperts1(state,showExperts){
             state.showExperts=showExperts;
         },
         setEvent(state,eventBean){
             state.eventBean=eventBean;
         },
-        setExpertsList(state,expertsList){
+        setExpertsList1(state,expertsList){
             console.log(expertsList);
            const data=[];
             for(let ele of expertsList) {
@@ -46,6 +53,15 @@ export default {
             console.log(data);
             state.expertsList=data;
 
+        },
+        setPageNumber(state, num){
+            state.pageNumber = num;
+        },
+        setNumber(state, num){
+            state.number = num;
+        },
+        setSearch(state, rulefrom){
+            state.search = rulefrom;
         }
 
     },
@@ -53,7 +69,7 @@ export default {
         async setExperts(context, page) {
 
             let experts = await getExperts(page.currentpage, page.pagesize,page.name,page.specialties,page.work);
-            context.commit('setExperts', experts);
+            context.commit('setExperts1', experts);
         },
        async setExpertsTalksPage(context, page){
            let experts = await getExpertsTalksPage(page.currentpage, page.pagesize);
@@ -62,12 +78,12 @@ export default {
         async setExp(context,id){
             /*根据id查专家，显示详情用*/
             let experts = await getExp(id);
-            context.commit('setExp', experts);
+            context.commit('setExp1', experts);
         },
         async setshowExperts(context,id){
             /*根据id查专家,修改用*/
             let experts = await getExp(id);
-            context.commit('setshowExperts', experts);
+            context.commit('setshowExperts1', experts);
         },
         async setEventBean(context,id){
             /*根据id查要会谈的事情的详情*/
@@ -77,7 +93,7 @@ export default {
         async setExpertsList(context,disaster){
             /*根据灾害类型查相关专家*/
             let experts = await getExpertsList(disaster);
-            context.commit('setExpertsList', experts);
+            context.commit('setExpertsList1', experts);
         }
 
 
