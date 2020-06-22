@@ -23,7 +23,7 @@
             </el-form-item>
         </el-form>
 
-        <el-button type="success" icon="el-icon-plus" @click="handleAdd">添加新虫害</el-button>
+        <el-button type="success" icon="el-icon-plus" @click="setAdd">添加新虫害</el-button>
         <el-button type="success" icon="el-icon-info">查看详细信息</el-button>
         <br>
         <br>
@@ -43,7 +43,7 @@
                 :total="total"
         ></el-pagination>
 
-        <AddPest :vis="false"></AddPest>
+        <AddPest :vis="addIsVisbale" @closeAdd="setAddClose"></AddPest>
 
     </div>
 </template>
@@ -59,7 +59,7 @@
         },
         data() {
             return {
-
+                addIsVisbale:false,
                 pestData: [],
                 pageSize: 5,
                 total: 0,
@@ -72,7 +72,10 @@
         },
         methods: {
             setAdd(){
-                    return false
+                    this.addIsVisbale=true;
+            },
+            setAddClose(){
+                    this.addIsVisbale=false;
             },
             async showPestData() {
                 let response = await axios({
@@ -105,10 +108,6 @@
                     this.form.condition2)
 
             },
-            handleAdd() {
-                this.setVis(true);
-            },
-
             handleSizeChange(val) {
                 this.pageSize = val;
                 this.showPestData()
@@ -118,9 +117,11 @@
                 this.currentPage = val
                 this.showPestData()
             },
+
         },
         mounted: function () {
-            this.showPestData()
+            this.showPestData();
+            this.$on("closeAdd",this.setAddClose())
         }
 
     };

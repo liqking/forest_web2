@@ -50,7 +50,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="出库人">
-                        <el-input type="text" v-model="formInline.user" disabled></el-input>
+                        <el-input type="text" v-model="this.username" disabled></el-input>
                     </el-form-item>
                     <el-button type="warning" style="margin-left: 50px" @click="outDelivery('formInline')">出 库</el-button>
                 </el-form>
@@ -449,12 +449,13 @@
                 return arr;
             },
              outDelivery(formName) {  //点击出库
+
                 //领用小班id(1) 出库人(1) 物品id(n) 出库数量(n)
                 this.$refs[formName].validate(async (valid) => {
                     if (valid && this.verify) {
                         let classId = this.formInline.name; //小班id
                         //出库人
-                        let outName = "出库人";
+                        let outName = this.username;
                         let outbound = "";   //出库设备id 与 出库数量
 
                         if(this.outTableData[0] == null){
@@ -597,6 +598,7 @@
         },
         computed:{
             ...mapState('dr',["idList"]),
+            ...mapState(["username"])
         },
         mounted() { //挂载后，初始化
             this.tableInit(this.currentPage,this.pagesize);
