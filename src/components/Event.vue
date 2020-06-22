@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 查询 -->
-        <el-form :model="ruleForm" :inline="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form :model="ruleForm" :inline="true" label-width="100px" class="demo-ruleForm">
             <el-form-item label="事件名称" prop="name">
                 <el-input v-model="ruleForm.name" style="width: 150px"></el-input>
             </el-form-item>
@@ -24,7 +24,7 @@
         <div id="add" style="margin-left: 30px">
             <el-button type="success" icon="el-icon-edit" @click="dialogFormVisible = true">添加事件</el-button>
             <el-dialog title="添加事件" :visible.sync="dialogFormVisible" width="800px">
-                <el-form :model="form" ref="form">
+                <el-form :rules="rules" :model="form" ref="form">
                     <el-row>
                         <el-col :span="12"><div class="grid-content bg-purple">
                             <el-form-item label="名称" prop="name" :label-width="formLabelWidth" style="width: 340px">
@@ -133,21 +133,19 @@
         </template>
 
         <!-- <div class="block">
+            <span class="demonstration"></span>
             <el-pagination
                     @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page=currentPage
-                    :page-sizes="[3, 5, 10]"
-                    :page-size=pageSize
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total=totalPage>
+                    :page-size="pageSize"
+                    layout="prev, pager, next"
+                    :total="tableData.total">
             </el-pagination>
         </div> -->
 
         <!-- 查看详情 -->
         <div id="info" style="margin-left: 30px">
             <el-dialog title="事件详情" :visible.sync="eventInfo" width="800px">
-                <el-form :model="eventform" ref="form">
+                <el-form :model="eventform">
                     <el-row>
                         <el-col :span="12"><div class="grid-content bg-purple">
                             <el-form-item label="名称" prop="name" :label-width="formLabelWidth" style="width: 340px">
@@ -218,7 +216,7 @@
         <!-- 修改 -->
         <div id="info" style="margin-left: 30px">
             <el-dialog title="修改事件" :visible.sync="eventUpdate" width="800px">
-                <el-form :model="updateform" ref="form">
+                <el-form :model="updateform">
                     <el-row>
                         <el-input v-show="false" v-model="updateform.id" autocomplete="off"></el-input>
                         <el-col :span="12"><div class="grid-content bg-purple">
@@ -282,6 +280,16 @@ import axios from 'axios';
         name: "Event",
         data() {
             return {
+                rules:{
+                    name:[ { required: true, message: "名称不能为空" }],
+                    date:[ { required: true, pattern: /^\d{4}-\d{2}-\d{2}$/, message: "日期必须为yyyy-MM-dd格式"} ],
+                    state:[ { required: true, message: '请选择状态', trigger: 'change' }],
+                    areaBean:[{ required: true, message: '请选择区域', trigger: 'change' }],
+                    area:[{ required: true, pattern: /^\d{1,}$/, message: "必须为数字格式"}],
+                    loss:[{ required: true, pattern: /^\d{1,}$/, message: "必须为数字格式"}],
+                    disasterType:[ { required: true, message: '请选择类型', trigger: 'change' }],
+                    pathWay:[ { required: true, message: '请选择发现途径', trigger: 'change' }],
+                },
                 areaList:[],
                 areaClasses:'',
                 updateform:{
@@ -343,24 +351,33 @@ import axios from 'axios';
             this.getAllArea();
         },
         methods:{
-            add(item){
-                axios({
-                    url: '/forest_sys/addEvent',
-                    method: 'get',
-                    params:{
-                        name:item.name,
-                        date : item.date,
-                        state: item.state,
-                        describe: item.describe,
-                        areaBean: item.areaBean,
-                        loss: item.loss,
-                        area: item.area,
-                        prevention: item.prevention,
-                        disasterType: item.disasterType,
-                        pathWay: item.pathWay,
-                        picture : this.imageUrl,
+            add(form){
+                this.$refs.form.validate((valid) => {
+                if (valid) {
+                    axios({
+                            url: '/forest_sys/addEvent',
+                            method: 'get',
+                            params:{
+                                name:form.name,
+                                date : form.date,
+                                state: form.state,
+                                describe: form.describe,
+                                areaBean: form.areaBean,
+                                loss: form.loss,
+                                area: form.area,
+                                prevention: form.prevention,
+                                disasterType: form.disasterType,
+                                pathWay: form.pathWay,
+                                picture : this.imageUrl,
+                            }
+                        })
+                        // this.dialogFormVisible = false
+                        location.reload();
+                    } else {
+                    console.log('error submit!!');
+                    return false;
                     }
-                })
+                    });
             },
             async getAllArea(){
                 let response = await axios({
@@ -382,6 +399,7 @@ import axios from 'axios';
                     }
                 })
                 this.eventUpdate = false
+                location.reload();
             },
             update(item){
                 this.eventUpdate = true
@@ -488,6 +506,8 @@ import axios from 'axios';
                         name: this.ruleForm.name,
                         state: this.ruleForm.state,
                         areaName: this.ruleForm.areaName,
+                        currentPage:this.currentPage,
+                        pageSize:this.pageSize,
                     }
                 });
                 this.tableData = response.data;
@@ -523,7 +543,7 @@ import axios from 'axios';
                 return isJPG && isLt2M;
             }
         }
-    }
+}
 </script>
 
 <style scoped>

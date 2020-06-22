@@ -77,18 +77,13 @@
                         </template>
                 </el-table-column>
             </el-table>
-        </template>
-        <!-- <div class="block">
-            <el-pagination
+            <!-- <el-pagination
                     @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page=currentPage
-                    :page-sizes="[3, 5, 10]"
-                    :page-size=pageSize
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total=totalPage>
-            </el-pagination>
-        </div> -->
+                    :page-size="pageSize"
+                    layout="total, prev, pager, next"
+                    :total="tableData.total">
+            </el-pagination> -->
+        </template>
 
         <!-- 查看小班详情 -->
         <div id="add" style="margin-left: 30px">
@@ -244,6 +239,7 @@ import axios from "axios";
                     }
                 })
                 this.classesupdate = false
+                location.reload();
             },
             add(){
                 axios({
@@ -258,6 +254,7 @@ import axios from "axios";
                     }
                 })
                 this.dialogFormVisible = false
+                location.reload();
             }, 
             async getArea(){
                 let response = await axios({
@@ -283,6 +280,8 @@ import axios from "axios";
                     params: {
                         name: this.ruleForm.name,
                         area: this.ruleForm.areaName,
+                        currentPage:this.currentPage,
+                        pageSize:this.currentPage,
                     }
                 });
                 console.log(response);
@@ -339,7 +338,6 @@ import axios from "axios";
                     this.classesupdateform.type = "苗圃地"
                 }
                 console.log(item)
-
             }
         }
     }

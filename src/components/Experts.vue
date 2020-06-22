@@ -167,13 +167,13 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-            handleShow( row){
+            handleShow(row){
                 //详情
                 this.setshowExperts(row.id);
                 this.openShow=true;
                 console.log(row)
             },
-             handleEdit( row) {
+            handleEdit( row) {
                 this.setExp(row.id);
                 this.openUpdate=true;
 

@@ -78,16 +78,13 @@
                 </el-table-column>
             </el-table>
         </template>
-
         <!-- <div class="block">
+            <span class="demonstration"></span>
             <el-pagination
                     @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page=currentPage
-                    :page-sizes="[3, 5, 10]"
-                    :page-size=pageSize
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total=totalPage>
+                    :page-size="pageSize"
+                    layout="total, prev, pager, next"
+                    :total="tableData.total">
             </el-pagination>
         </div> -->
 
@@ -135,6 +132,7 @@ import axios from 'axios';
                     }
                 })
                 this.dialogFormVisible = false
+                location.reload();
             }, 
             // 初始化表格
             async tableInfo() {
@@ -189,6 +187,7 @@ import axios from 'axios';
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
+            
             
         }
     }
