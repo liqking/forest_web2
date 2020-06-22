@@ -37,6 +37,7 @@
     import qs from "qs";
 
     export default {
+
         name: "AddPest",
         props:["vis"],
         data() {
