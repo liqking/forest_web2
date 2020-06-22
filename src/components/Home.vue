@@ -36,7 +36,7 @@
                         <el-submenu index="5-1" :style="xt" >
                             <template slot="title"><i class="el-icon-folder"></i>系统信息</template>
                             <el-menu-item index="/user"><i class="el-icon-document-copy"></i>用户管理</el-menu-item>
-                            <el-menu-item index="5-1-2"><i class="el-icon-document-copy"></i>日志一览</el-menu-item>
+                            <el-menu-item index="/log"><i class="el-icon-document-copy"></i>日志一览</el-menu-item>
                         </el-submenu>
                     </el-submenu>
                 </el-menu>

@@ -12,8 +12,9 @@ import Area from "../components/Area";
 import Classes from "../components/Classes";
 import Event from "../components/Event";
 import Pest from "../components/Pest";
-import User from "../components/User"
-import ExpertsTalks from '../components/ExpertsTalks'
+import User from "../components/User";
+import ExpertsTalks from '../components/ExpertsTalks';
+import Log from "../components/Log";
 
 Vue.use(VueRouter)
 
@@ -39,7 +40,9 @@ const routes = [
             //用户管理
             {path: '/user', component: User},
             //专家需要会商的页面
-            {path:'/ExpertsTalks',component:ExpertsTalks}
+            {path:'/ExpertsTalks',component:ExpertsTalks},
+            //日记页面
+            {path:'/log',component:Log}
         ],
     },
     {
