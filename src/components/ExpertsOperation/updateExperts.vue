@@ -76,14 +76,14 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex';
+    import {mapState,mapActions} from 'vuex';
     import axios from 'axios'
     import qs from 'qs'
     export default {
         name: "updateExperts",
         props:["openUpdate"],
         computed: {
-            ...mapState('Experts', ["experts"])
+            ...mapState('Experts', ["experts","pageNumber","number","search"])
         },
         data() {
             return {
@@ -109,6 +109,7 @@
             };
         },
         methods: {
+            ...mapActions('Experts',["setExperts"]),
             async  add(experts){
                 let response = await axios({
                     headers: {
@@ -129,6 +130,15 @@
                         head:experts.head,
                         id:experts.id
                     })
+                });
+
+
+                this.setExperts({
+                    currentpage:this.pageNumber
+                    ,pagesize:this.number,
+                    name:this.search.name,
+                    specialties:this.search.specialties,
+                    work:this.search.work
                 });
                 console.log(response.data)
 

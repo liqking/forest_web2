@@ -88,7 +88,7 @@
                 <!--穿梭框-->
                 <el-button type="success" plain @click="dialogVisibles = true;" style="z-index:12;">添加会商专家</el-button>
 
-                <el-button @click="dialogVisible = false">返 回</el-button>
+                <el-button @click="goBack">返 回</el-button>
                 <el-button type="primary" @click="add">添加会商信息</el-button>
             </div>
             <!--会谈结果显示-->
@@ -166,14 +166,15 @@
                 formLabelWidth: '80px',
                 dialogVisible: false,
                 dialogVisibles: false,
-                size: 4
+                size: 4,
+                pageNumber:1
             }
         },
         computed: {
             ...mapState('Experts', ["expertsTalks", "eventBean","expertsList"])
         },
         created() {
-            this.setExpertsTalksPage({currentpage: 1, pagesize: this.size});
+            this.setExpertsTalksPage({currentpage: this.pageNumber, pagesize: this.size});
         },
         methods: {
             ...mapActions('Experts', ["setExpertsTalksPage", "setEventBean","setExpertsList"]),
@@ -188,15 +189,21 @@
             },
             handleSizeChange(val) {
                 this.size = val;
-                this.setExpertsTalksPage({currentpage: 1, pagesize: val});
+                this.setExpertsTalksPage({currentpage: this.pageNumber, pagesize: val});
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {
+                this.pageNumber=val;
                 this.setExpertsTalksPage({currentpage: val, pagesize: this.size});
                 console.log(`当前页: ${val}`);
             },
             handleClose() {
                 this.dialogVisible = false;
+            },
+            goBack(){
+                //返回，并刷新专家要商谈的事件
+                this.dialogVisible = false;
+                this.setExpertsTalksPage({currentpage: this.pageNumber, pagesize: this.size});
             },
            async add(){
                if(this.value.length==0){
@@ -255,6 +262,11 @@
     div.demo .el-transfer {
         width: 100px;
         height: 80px;
+    }
+    .avatar{
+        width: 150px;
+        height: 150px;
+        display: block;
     }
 
 </style>
