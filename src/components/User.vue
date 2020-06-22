@@ -2,18 +2,18 @@
     <div>
         <!--查询-->
         <el-form :model="ruleForm" :inline="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="查询专家信息" prop="">
-                <el-input v-model="ruleForm.name" placeholder="姓名" style="width: 120px"></el-input>
-            </el-form-item>
-            <el-form-item label="专长" prop="">
-                <el-input v-model="ruleForm.specialties" style="width: 120px"></el-input>
-            </el-form-item>
-            <el-form-item label="工作单位" prop="">
-                <el-input v-model="ruleForm.work" style="width: 120px"></el-input>
-            </el-form-item>
+            <el-select v-model="ruleForm.usergrade" placeholder="所有用户">
+                <el-option label="所有用户" value="所有用户"></el-option>
+                <el-option label="超级管理员" value="超级管理员"></el-option>
+                <el-option label="资料管理员" value="资料管理员"></el-option>
+                <el-option label="灾情管理员" value="灾情管理员"></el-option>
+                <el-option label="专家管理员" value="专家管理员"></el-option>
+                <el-option label="库房管理员" value="库房管理员"></el-option>
+            </el-select>
             <el-form-item>
                 <el-button type="success" plain @click="submitForm()">查询</el-button>
-                <el-button type="info" plain @click="resetForm('ruleForm')">重置</el-button>
+                <el-button type="success" icon=" el-icon-plus" plain @click="openadds">添加专家</el-button>
+                <addUser :openadd.sync="openadd"></addUser>
             </el-form-item>
         </el-form>
         <template>
@@ -22,40 +22,36 @@
                     style="width: 100%"
                     :row-class-name="tableRowClassName">
                 <el-table-column
-                        prop="date"
-                        label="姓名"
-                        width="180">
+                        prop="username"
+                        label="用户名"
+                        width="150">
                 </el-table-column>
                 <el-table-column
-                        prop="name"
-                        label="工作单位"
-                        width="240">
+                        prop="userpwd"
+                        label="密码"
+                        width="150">
                 </el-table-column>
                 <el-table-column
-                        prop="address"
-                        label="专长">
+                        prop="usergrade"
+                        label="等级">
                 </el-table-column>
                 <el-table-column
-                        prop="address"
-                        label="职务">
+                        prop="userrealname"
+                        label="真实姓名">
                 </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="电话">
-                </el-table-column>
+
 
                 <el-table-column label="操作" width="240" >
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
                                 size="mini"
-                                @click="handleEdit(scope.$index, scope.row)">编辑
+                                @click="handleEdit(scope.row)">编辑
                         </el-button>
                         <el-button
                                 type="text"
                                 size="mini"
-
-                                @click="handleDelete(scope.$index, scope.row)">删除
+                                @click="myconfirm( scope.row)">删除
                         </el-button>
                     </template>
                 </el-table-column>
@@ -69,36 +65,44 @@
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :page-sizes="[2,4,6]"
-                        :page-size="4"
+                        :page-size="pageSize"
                         layout="total, prev, pager, next,sizes"
-                        :total="10">
+                        :total="total">
                 </el-pagination>
             </div>
         </template>
+
     </div>
 </template>
 
 <script>
     import {mapState} from 'vuex';
-    import qs from "qs";
+    // import qs from "qs";
     import axios from "axios";
+    import addUser from "./ExpertsOperation/addUser";
     export default {
+        components: {
+            addUser
+        },
         computed: {
             ...mapState('Experts', ["open"])
         },
-        name: "Experts",
+        name: "User",
         data() {
             return {
+                openadd :false,
                 tableData: [{}],
                 ruleForm: {
-                    name: '',
-                    specialties: '',
-                    work: '',
+                    usergrade: '',
                 },
-                currentPage1: 5,
+                pageSize: 4,
+                currentPage:1,
+                total: 0,
+                // currentPage1: 5,
             }
         },
         methods: {
+
             tableRowClassName({row, rowIndex}) {
                 console.log(this.open)
                 console.log(row);
@@ -109,45 +113,116 @@
                 }
                 return '';
             },
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
+            openadds() {
+                this.openadd = true;
+            },
+
+            async showPestData() {
+                let response = await axios({
+                    url: '/forest_sys/seekuser',
+                    method: "get",
+                    params: {
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize,
+                        usergrade: "所有用户"
                     }
                 });
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            },
-            handleEdit(index, row) {
+                console.log(response.data)
+                // this.currentPage1 = response.data.pageNum
+                this.total = response.data.total;
+                this.pageSize = response.data.pageSize;
+                this.tableData = response.data.list;
+                console.log(this.currentPage1,
+                    this.pageSize,
+                    this.tableData,
+                    this.total)
 
-                console.log(row,index)
+            },
+
+            async submitForm() {
+
+                this.currentPage = 1
+                let response = await axios({
+                    url: '/forest_sys/seekuser',
+                    method: "get",
+                    params: {
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize,
+                        usergrade: this.ruleForm.usergrade
+                    }
+                });
+                console.log(response.data)
+                // this.currentPage1 = response.data.pageNum
+                this.total = response.data.total;
+                this.pageSize = response.data.pageSize;
+                this.tableData = response.data.list;
+            },
+            //编辑
+            handleEdit(row) {
+
+                console.log(row)
 
             },
-            async handleDelete(index, row) {
-                console.log(index,row)
+            myconfirm (row) {
+                if(confirm('确定要删除吗')==true){
+                    this.handleDelete(row)
+                }
+            },
+            //删除
+            async handleDelete(row) {
+                console.log(row.username)
                 await axios({
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    url: "",
-                    method: "post",
-                    data: qs.stringify({
-
-
-                    })
+                    url: "/forest_sys/removeuser",
+                    method: "get",
+                    params: {
+                        username: row.username,
+                    }
                 });
-
+                this.showPestData()
             },
-            handleSizeChange(val) {
+            async handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
+                this.pageSize = val
+                let response = await axios({
+                    url: '/forest_sys/seekuser',
+                    method: "get",
+                    params: {
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize,
+                        usergrade: "所有用户"
+                    }
+                });
+                console.log(response.data)
+                this.currentPage1 = response.data.pageNum
+                this.total = response.data.total;
+                this.pageSize = response.data.pageSize;
+                this.tableData = response.data.list;
             },
-            handleCurrentChange(val) {
+            async handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
+                this.currentPage = val
+                let response = await axios({
+                    url: '/forest_sys/seekuser',
+                    method: "get",
+                    params: {
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize,
+                        usergrade: "所有用户"
+                    }
+                });
+                console.log(response.data)
+                this.currentPage1 = response.data.pageNum
+                this.total = response.data.total;
+                this.pageSize = response.data.pageSize;
+                this.tableData = response.data.list;
             }
+        },
+        mounted: function () {
+            this.showPestData();
+            // this.$on("closeAdd",this.setAddClose())
         }
     }
 </script>
@@ -159,5 +234,14 @@
 
     .el-table .success-row {
         background: #f0f9eb;
+    }
+    .el-dropdown {
+        vertical-align: top;
+    }
+    .el-dropdown + .el-dropdown {
+        margin-left: 15px;
+    }
+    .el-icon-arrow-down {
+        font-size: 12px;
     }
 </style>
