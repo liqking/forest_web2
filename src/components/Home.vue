@@ -5,7 +5,6 @@
                 <el-menu
                         :router="true"
                         :default-active="$route.path"
-                        :default-openeds="['1']"
                 >
                     <!-- 上面 router激活，vue-router功能 index=to -->
                     <el-submenu index="1">
