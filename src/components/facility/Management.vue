@@ -580,6 +580,7 @@
                     }
                     //通过下标切割json
                     this.outTableData.splice(i, 1);
+                    this.getIndex2 = null;  //清空选中行背景颜色
                 }
             },
             changeNumInput(v){   //input输入框改变时触发 e是输入的值
@@ -617,6 +618,4 @@
         margin-right: 120px;
         display: inline;
     }
-
-
 </style>
