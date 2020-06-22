@@ -7,7 +7,7 @@
                 <!--右边-->
                 <div class="left1">
                     <el-form-item label="姓名" :label-width="formLabelWidth">
-                        <el-input v-model="form.expertsName" autocomplete="off"></el-input>
+                        <el-input @change="selectName" v-model="form.expertsName" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="出生日期" :label-width="formLabelWidth">
                         <div class="block">
@@ -91,7 +91,7 @@
                     expertsName: '',
                     date: '',
                     //专长
-                    specialties: '',
+                    specialties:'',
                     //通讯地址
                     site: '',
                     //职务
@@ -109,6 +109,31 @@
         },
         methods: {
             ...mapActions('Experts',["setExperts"]),
+          async  selectName(){
+                //验证名字
+                console.log(21);
+
+                let response = await axios({
+                    url:'/forest_sys/queryName',
+                    method:'get',
+                    params:{
+                        expertsName:this.form.expertsName
+                    }
+                });
+                console.log(response)
+                if (response.data=="1"){
+                    this.$message({
+                        message: '该专家已经存在请重新输入',
+                        type: 'warning'
+                    });
+                    this.form.expertsName="";
+                }
+
+
+
+
+
+            },
             async  add(experts){
                 console.log(this.form.date);
                 //添加
