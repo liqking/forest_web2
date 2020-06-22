@@ -56,7 +56,7 @@
                         {{eventBean.date}}
                     </el-form-item>
                     <el-form-item label="发生位置:" :label-width="formLabelWidth">
-                      <!--  {{eventBean.areaBean}}-->
+                     {{eventBean.areaBean.name}}
                     </el-form-item>
                     <el-form-item label="灾情描述:" :label-width="formLabelWidth">
                         {{eventBean.describe}}
