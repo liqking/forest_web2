@@ -12,7 +12,7 @@
                         <el-submenu index="1-1" :style="zl">
                             <template slot="title"><i class="el-icon-folder"></i>资料管理</template>
                             <el-menu-item index="/Pest"><i class="el-icon-document-copy"></i>虫害一览</el-menu-item>
-                            <el-menu-item index="1-1-2"><i class="el-icon-document-copy"></i>病害一览</el-menu-item>
+                            <el-menu-item index="/Disease"><i class="el-icon-document-copy"></i>病害一览</el-menu-item>
                             <el-menu-item index="1-1-2"><i class="el-icon-document-copy"></i>鼠害一览</el-menu-item>
                         </el-submenu>
                         <el-submenu index="2-1" :style="zq">
