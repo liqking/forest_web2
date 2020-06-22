@@ -43,7 +43,7 @@
                 :total="total"
         ></el-pagination>
 
-        <AddPest :vis="setAdd"></AddPest>
+        <AddPest :vis="false"></AddPest>
 
     </div>
 </template>

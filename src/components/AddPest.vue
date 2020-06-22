@@ -60,7 +60,7 @@
 
         methods: {
             dialogclose() {
-                this.setVis(false)
+                // this.setVis(false)
             },
             async onSubmit() {
 
