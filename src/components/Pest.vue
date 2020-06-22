@@ -24,10 +24,11 @@
         </el-form>
 
         <el-button type="success" icon="el-icon-plus" @click="setAdd">添加新虫害</el-button>
-        <el-button type="success" icon="el-icon-info">查看详细信息</el-button>
+        <el-button type="success" icon="el-icon-info" @click="setDetail">查看详细信息</el-button>
         <br>
         <br>
-        <el-table :data="pestData" height="350" border style="width: 100%">
+        <el-table :data="pestData" height="350" border style="width: 100%"
+        @row-click="rowClick" :cell-style="rowStyleChange">
             <el-table-column prop="name" label="名称" width="180"></el-table-column>
             <el-table-column prop="host" label="宿主" width="180"></el-table-column>
             <el-table-column prop="harm" label="主要危害"></el-table-column>
@@ -45,21 +46,27 @@
 
         <AddPest :vis="addIsVisbale" @closeAdd="setAddClose"></AddPest>
 
+        <PestDetail :selectedDetail="selectedRow" :detailVisble="detailIsVisible" @closeDetail="setDetailClose"></PestDetail>
     </div>
 </template>
 
 <script>
     import AddPest from './AddPest.vue'
     import axios from 'axios'
+    import PestDetail from './PestDetail'
     // import qs from 'qs'
 
     export default {
         components: {
-            AddPest
+            AddPest,
+            PestDetail
         },
         data() {
             return {
+                selectedRow:{},
+                tableStyle:"width: 100%;",
                 addIsVisbale:false,
+                detailIsVisible:false,
                 pestData: [],
                 pageSize: 5,
                 total: 0,
@@ -71,6 +78,29 @@
             };
         },
         methods: {
+            setDetail(){
+
+                if(this.selectedRow.id!=null){
+                    this.detailIsVisible=true;
+                }else {
+                    alert("请先选择一行")
+                }
+
+            },
+            setDetailClose(){
+                this.detailIsVisible=false;
+            },
+            rowClick(row){
+               this.selectedRow=row;
+
+            },
+            rowStyleChange({row}){
+
+                if(this.selectedRow.id==row.id){
+                    return "backgroundColor: #d5ff7e"
+                }
+
+            },
             setAdd(){
                     this.addIsVisbale=true;
             },
@@ -97,15 +127,12 @@
                         condition_Host: this.form.condition2
                     }
                 });
-                console.log(response.data)
+
                 this.currentPage = response.data.pageNum
                 this.total = response.data.total;
                 this.pageSize = response.data.pageSize;
                 this.pestData = response.data.list;
-                console.log(this.currentPage,
-                    this.pageSize,
-                    this.form.condition1,
-                    this.form.condition2)
+
 
             },
             handleSizeChange(val) {
@@ -121,7 +148,7 @@
         },
         mounted: function () {
             this.showPestData();
-            this.$on("closeAdd",this.setAddClose())
+
         }
 
     };
@@ -132,6 +159,7 @@
         font-size: 28px;
         text-align: center;
         margin-bottom: 25px;
+
     }
 
     .myinput {
