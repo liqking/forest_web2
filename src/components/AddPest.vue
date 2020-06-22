@@ -26,7 +26,7 @@
                 <!--上传幼虫图片-->
                 <el-upload
                         class="upload-demo"
-                        action="http://localhost:8080/forest_sys/pestUpload"
+                        action="https://jsonplaceholder.typicode.com/posts/"
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
                         :file-list="fileList"
