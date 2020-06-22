@@ -5,7 +5,7 @@
                 <el-menu
                         :router="true"
                         :default-active="$route.path"
-                        :default-openeds="['1','4-1']"
+                        :default-openeds="['1']"
                 >
                     <!-- 上面 router激活，vue-router功能 index=to -->
                     <el-submenu index="1">
@@ -79,7 +79,6 @@
             if(response.data){
                 next(vm=>{
                     vm.usergrade = response.data.usergrade
-                    console.log(response.data)
                 })
             }else {
                 next('/login')
@@ -97,10 +96,7 @@
                 this.$router.push('/login')
             },
             user(){
-                if(this.$store.state.usergrade!=""){
-                    this.usergrade  = this.$store.state.usergrade;}
-                console.log(this.usergrade)
-                console.log("aaa")
+                this.usergrade  = this.$store.state.usergrade;
 
                 if (this.usergrade === "资料管理员") {
                     this.zl = "display: block"
