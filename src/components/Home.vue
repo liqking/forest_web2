@@ -42,7 +42,18 @@
             </el-aside>
 
             <el-container>
-                <el-header>森林病虫害防治系统</el-header>
+                <el-header>
+                    <el-row>
+                        <!--<el-col :span="24"><div class="grid-content bg-purple-dark">森林病虫害防治系统</div></el-col>-->
+                        <el-row>
+                            <el-col :span="16" :push="2"><div class="grid-content bg-purple">森林病虫害防治系统</div></el-col>
+                            <el-col :span="4" :push="2"><div class="grid-content bg-purple-light">登录用户：{{this.$store.state.username}}</div></el-col>
+                            <el-col :span="2" :push="2">
+                                <div class="grid-content bg-purple"><i @click="out" class="el-icon-switch-button" style="font-weight: bold">退出</i></div>
+                            </el-col>
+                        </el-row>
+                    </el-row>
+                </el-header>
                 <el-main>
                     <!--路由视图-->
                     <router-view></router-view>
@@ -112,6 +123,13 @@
                         this.zq = "display: block",
                         this.zl = "display: block"
                 }
+            },
+            async out() {
+                await axios({
+                    url: '/forest_sys/resession',
+                    method: 'get',
+                });
+                this.$router.push("./Login")
             }
 
         },
