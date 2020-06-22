@@ -44,7 +44,7 @@
                 :total="total"
         ></el-pagination>
 
-        <AddPest :vis="addIsVisbale" @closeAdd="setAddClose"></AddPest>
+        <AddPest :vis="addIsVisbale" @closeAdd="setAddClose" @updateData="showPestData"></AddPest>
 
         <PestDetail :selectedDetail="selectedRow" :detailVisble="detailIsVisible" @closeDetail="setDetailClose"></PestDetail>
     </div>
