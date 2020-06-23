@@ -1,30 +1,30 @@
 <template>
     <div>
         <el-dialog title="添加新病害" :visible.sync="vis" width="50%" :before-close="dialogclose">
-            <el-form ref="form" :model="form" label-width="80px" :inline="true">
-                <el-form-item label="名称">
+            <el-form ref="form" :model="form" :rules="rules" label-width="80px" :inline="true">
+                <el-form-item label="名称" prop="name">
                     <el-input v-model="form.name" placeholder="请输入内容"></el-input>
                 </el-form-item>
-                <el-form-item label="病原">
+                <el-form-item label="病原" prop="cause">
                     <el-input v-model="form.cause" placeholder="请输入内容"></el-input>
                 </el-form-item>
-                <el-form-item label="发病症状">
+                <el-form-item label="发病症状" prop="symptom">
                     <el-input v-model="form.symptom" placeholder="请输入内容"></el-input>
                 </el-form-item>
-                <el-form-item label="发病规律">
+                <el-form-item label="发病规律" prop="pattern">
                     <el-input v-model="form.pattern" placeholder="请输入内容"></el-input>
                 </el-form-item>
 
-                <el-form-item label="防治措施">
+                <el-form-item label="防治措施" prop="measure">
                     <el-input type="textarea" v-model="form.measure" :rows="5"
                               placeholder="请输入内容"></el-input>
                 </el-form-item>
-                <el-form-item label="主要危害" style="margin-left: 18px">
+                <el-form-item label="主要危害" prop="harm" style="margin-left: 18px">
                     <el-input type="textarea" v-model="form.harm" :rows="5"
                               placeholder="请输入内容"></el-input>
                 </el-form-item>
                 <!--上传图片-->
-                <el-form-item label="图片" style="margin-left: 18px">
+                <el-form-item label="图片" prop="img" style="margin-left: 18px">
                     <el-input type="text" v-model="form.img"
                               placeholder=""></el-input>
                     <el-upload
@@ -45,7 +45,7 @@
                 <br>
 
             </el-form>
-            <el-button type="success" @click="onSubmit">确认</el-button>
+            <el-button type="success" @click="commitForm('form')">确认</el-button>
             <el-button type="success" @click="dialogclose">取消</el-button>
         </el-dialog>
 
@@ -74,7 +74,15 @@
                     pattern:'',
                     img:'',
                 },
-
+                rules:{
+                    name: [{ required: true, message: '请输入名称', trigger: 'change' }],
+                    cause: [{ required: true, message: '请输入病原', trigger: 'change' }],
+                    symptom: [{ required: true, message: '请输入发病症状', trigger: 'change' }],
+                    measure: [{ required: true, message: '请输入防治措施', trigger: 'change' }],
+                    harm: [{ required: true, message: '请输入主要危害', trigger: 'change' }],
+                    pattern:[{ required: true, message: '请输入发病规律', trigger: 'change' }],
+                    img:[{ required: true, message: '请选择图片', trigger: 'change' }],
+                }
 
             }
 
@@ -95,6 +103,16 @@
             },
             dialogclose() {
                 this.$emit("closeAdd")
+            },
+            commitForm(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.onSubmit()
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             },
             async onSubmit() {
 

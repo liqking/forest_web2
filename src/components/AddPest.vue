@@ -1,30 +1,30 @@
 <template>
     <div>
         <el-dialog title="添加新虫害" :visible.sync="vis" width="50%" :before-close="dialogclose">
-            <el-form ref="form" :model="form" label-width="80px" :inline="true">
-                <el-form-item label="害虫名">
+            <el-form ref="form" :model="form" :rules="rules" label-width="80px" :inline="true">
+                <el-form-item label="害虫名" prop="name">
                     <el-input v-model="form.name" placeholder="请输入内容"></el-input>
                 </el-form-item>
-                <el-form-item label="寄主">
+                <el-form-item label="寄主" prop="host">
                     <el-input v-model="form.host" placeholder="请输入内容"></el-input>
                 </el-form-item>
-                <el-form-item label="繁殖">
+                <el-form-item label="繁殖" prop="breed">
                     <el-input v-model="form.breed" placeholder="请输入内容"></el-input>
                 </el-form-item>
-                <el-form-item label="天敌">
+                <el-form-item label="天敌" prop="enemy">
                     <el-input v-model="form.enemy" placeholder="请输入内容"></el-input>
                 </el-form-item>
 
-                <el-form-item label="防治措施">
+                <el-form-item label="防治措施" prop="measure">
                     <el-input type="textarea" v-model="form.measure" :rows="5"
                               placeholder="请输入内容"></el-input>
                 </el-form-item>
-                <el-form-item label="主要危害" style="margin-left: 18px">
+                <el-form-item label="主要危害" prop="harm" style="margin-left: 18px">
                     <el-input type="textarea" v-model="form.harm" :rows="5"
                               placeholder="请输入内容"></el-input>
                 </el-form-item>
                 <!--上传幼虫图片-->
-                <el-form-item label="幼虫图片" style="margin-left: 18px">
+                <el-form-item label="幼虫图片" prop="larvaImg" style="margin-left: 18px">
                     <el-input type="text" v-model="form.larvaImg"
                               placeholder=""></el-input>
                     <el-upload
@@ -45,7 +45,7 @@
                 </el-form-item>
                 <br>
                 <!--//上传成虫图片-->
-                <el-form-item label="成虫图片" style="margin-left: 18px">
+                <el-form-item label="成虫图片" prop="adultImg" style="margin-left: 18px">
                     <el-input type="text" v-model="form.adultImg"
                               placeholder=""></el-input>
                     <el-upload
@@ -64,7 +64,7 @@
                 </el-form-item>
                 <br>
             </el-form>
-            <el-button type="success" @click="onSubmit">确认</el-button>
+            <el-button type="success" @click="commitForm('form')">确认</el-button>
             <el-button type="success" @click="dialogclose">取消</el-button>
         </el-dialog>
 
@@ -95,7 +95,16 @@
                     larvaImg: '',
                     adultImg: ''
                 },
-
+                rules:{
+                    name:[{ required: true, message: '请输入名称', trigger: 'change' }],
+                    host: [{ required: true, message: '请输入寄主', trigger: 'change' }],
+                    breed: [{ required: true, message: '请输入繁殖规律', trigger: 'change' }],
+                    enemy: [{ required: true, message: '请输入天敌', trigger: 'change' }],
+                    measure: [{ required: true, message: '请输入防治措施', trigger: 'change' }],
+                    harm: [{ required: true, message: '请输入主要危害', trigger: 'change' }],
+                    larvaImg: [{ required: true, message: '请选择幼虫图片', trigger: 'change' }],
+                    adultImg: [{ required: true, message: '请选择成虫图片', trigger: 'change' }]
+                },
 
             }
 
@@ -116,6 +125,16 @@
             },
             dialogclose() {
                 this.$emit("closeAdd")
+            },
+            commitForm(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.onSubmit()
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             },
             async onSubmit() {
 
