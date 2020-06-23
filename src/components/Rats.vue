@@ -37,7 +37,7 @@
                 :total="total"
         ></el-pagination>
 
-        <AddRats :vis="addIsVisbale" @closeAdd="setAddClose"></AddRats>
+        <AddRats :vis="addIsVisbale" @closeAdd="setAddClose" @updateData="showRatsData"></AddRats>
 
         <RatsDetail :selectedDetail="selectedRow" :detailVisble="detailIsVisible" @closeDetail="setDetailClose"></RatsDetail>
     </div>

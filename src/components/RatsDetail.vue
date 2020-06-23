@@ -13,8 +13,11 @@
             <p>天敌：{{selectedDetail.enemy}}</p><br>
             <p>主要危害：{{selectedDetail.harm}}</p><br>
             <p>防治措施：{{selectedDetail.measure}}</p><br>
-            <p>图片：{{selectedDetail.img}}</p><br>
-
+            <p>图片：</p><br>
+            <el-image
+                    style="width: 100px; height: 100px"
+                    :src="'/forest_sys'+selectedDetail.img"
+            ></el-image>
         </div>
 
         <span slot="footer" class="dialog-footer">

@@ -3,13 +3,16 @@
        <!-- <el-button type="text" @click="dialogFormVisible = true"></el-button>-->
 
         <el-dialog title="添加专家" :visible.sync="openadd" :before-close="dialogClose">
-            <el-form :model="form">
+            <el-form
+                    :model="form"
+                    :rules="rules"
+                    ref="form">
                 <!--右边-->
                 <div class="left1">
-                    <el-form-item label="姓名" :label-width="formLabelWidth">
+                    <el-form-item label="姓名" :label-width="formLabelWidth" prop="expertsName">
                         <el-input @change="selectName" v-model="form.expertsName" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="出生日期" :label-width="formLabelWidth">
+                    <el-form-item label="出生日期" :label-width="formLabelWidth" prop="date">
                         <div class="block">
                            <!-- <span class="demonstration">默认</span>-->
                             <el-date-picker
@@ -20,11 +23,11 @@
                             </el-date-picker>
                         </div>
                     </el-form-item>
-                    <el-form-item label="专长" :label-width="formLabelWidth">
+                    <el-form-item label="专长" :label-width="formLabelWidth" prop="specialties">
                         <el-select v-model="form.specialties" placeholder="请选择擅长领域">
-                            <el-option label="虫害" value="1"></el-option>
-                            <el-option label="病害" value="2"></el-option>
-                            <el-option label="鼠害" value="3"></el-option>
+                            <el-option label="虫害防治" value="1"></el-option>
+                            <el-option label="病害防治" value="2"></el-option>
+                            <el-option label="鼠害防治" value="3"></el-option>
                         </el-select>
 
                     </el-form-item>
@@ -68,7 +71,7 @@
             <div slot="footer" class="dialog-footer">
               <!--  dialogFormVisible = false-->
                 <el-button @click="$emit('update:openadd',false)">取 消</el-button>
-                <el-button type="primary" @click="$emit('update:openadd',false);add(form);">确 定</el-button>
+                <el-button type="primary" @click="submitEdit('form');">添 加</el-button>
             </div>
         </el-dialog>
     </div>
@@ -96,7 +99,7 @@
                     site: '',
                     //职务
                     duty: '',
-                    sex:1,
+                    sex:'男',
                     telephone:'',
                     head: '',
                     work:'',
@@ -104,7 +107,19 @@
                     mailbox:'',
                     delivery: false,
                 },
-                formLabelWidth: '80px'
+                formLabelWidth: '80px',
+                rules: {
+                    expertsName: [
+                        {required: true, message: '请输入姓名'}
+                    ],
+                    specialties: [
+                        { required: true, message: '请选择擅长领域', trigger: 'change' }
+                    ],
+                    date: [
+                        { required: true, message: '选择出生日期', trigger: 'change' }
+                        ]
+
+                }
             };
         },
         methods: {
@@ -134,39 +149,65 @@
 
 
             },
-            async  add(experts){
-                console.log(this.form.date);
+            submitEdit(form){
+                console.log(this.$refs[form]);
+                this.$emit('update:openadd',false);
                 //添加
-                let response = await axios({
 
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    url:'/forest_sys/addExperts',
-                    method:'post',
-                    data:qs.stringify({
-                        expertsName:experts.expertsName,
-                        date:experts.date,
-                        sex:experts.sex,
-                        specialties:experts.specialties,
-                        telephone:experts.telephone,
-                        site:experts.site,
-                        duty:experts.duty,
-                        work:experts.work,
-                        mailbox:experts.mailbox,
-                        head:experts.head
-                    })
+                this.$refs[form].validate(async (valid) => {
+                    if (valid) {
+
+
+                        let response = await  axios({
+
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            url:'/forest_sys/addExperts',
+                            method:'post',
+                            data:qs.stringify({
+                                expertsName:this.form.expertsName,
+                                date:this.form.date,
+                                sex:this.form.sex,
+                                specialties:this.form.specialties,
+                                telephone:this.form.telephone,
+                                site:this.form.site,
+                                duty:this.form.duty,
+                                work:this.form.work,
+                                mailbox:this.form.mailbox,
+                                head:this.form.head
+                            })
+                        }).then(()=>{
+
+                            this.setExperts({
+                                currentpage:this.pageNumber
+                                ,pagesize:this.number,
+                                name:this.search.name,
+                                specialties:this.search.specialties,
+                                work:this.search.work
+                            });
+                            console.log(response);
+                            this.$message({
+                                message: '添加成功成功',
+                                type: 'success'
+                            });
+
+                        })
+
+
+
+
+
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
                 });
 
 
-                this.setExperts({
-                    currentpage:this.pageNumber
-                    ,pagesize:this.number,
-                    name:this.search.name,
-                    specialties:this.search.specialties,
-                    work:this.search.work
-                });
-                console.log(response.data)
+
+
+
 
             },
             dialogClose(){

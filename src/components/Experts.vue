@@ -158,7 +158,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+
 
                         this.setPageNumber(1);
                         this.setNumber(4);

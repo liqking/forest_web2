@@ -73,9 +73,11 @@
                                 <!-- 限制只能输入数字 和 数字最大值
                                      oninput="if(value>127)value=127"
                                     @input="changeNumInput"
+                                    (/^((?!^[1-9]\d*$).)*/g,'')
+                                    (/[^\d.]/g,'')
                                 -->
                                 <el-input
-                                        onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"
+                                        onkeyup="this.value = this.value.replace(/^((?!^[1-9]\d*$).)*/g,'');"
                                         v-model="scope.row.num"
                                         @input="changeNumInput"
                                         class="input">
@@ -366,6 +368,7 @@
                 this.insidePageSize = response.data.pageSize;
                 this.insideTotalPage = response.data.total;
                 this.insideTableData = this.filter(response.data.list);
+
             },
             async insideTableDataInit(currentPage=1 ,pageSize=3) {  //初始化显示添加物品
                 let response = await axios({
@@ -506,6 +509,7 @@
                         return false;
                     }
                 });
+                this.outTableData = [];
             },
             nullDelivery(){
                 this.emptyIdList();
@@ -540,7 +544,9 @@
             //展示领取的设备
             async showGetEquipment() {
 
-                let strId = this.idList.toString();
+                //获取去重后的，领取物品id
+                let strId = [...new Set(this.idList)].toString();
+
                 if( strId != ""){
                     //根据多个id 查询多个设备
                     let response = await axios({
@@ -561,7 +567,8 @@
                     //如果选择id集合为null，
                     this.outTableData = null;
                 }
-                this.innerVisible = false
+                this.innerVisible = false;
+
             },
             clear(str) {
                 str = str.replace(/,/g, "");//取消字符串中出现的所有逗号

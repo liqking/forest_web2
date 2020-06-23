@@ -24,19 +24,24 @@
                               placeholder="请输入内容"></el-input>
                 </el-form-item>
                 <!--上传图片-->
-                <el-upload
-                        class="upload-demo"
-                        action="https://jsonplaceholder.typicode.com/posts/"
-                        :on-preview="handlePreview"
-                        :on-remove="handleRemove"
-                        :file-list="fileList"
-                        list-type="picture"
-                        :limit="1"
-                        :on-exceed="handleExceed">
-                    <el-button size="small" type="success">上传图片</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-
-                </el-upload>
+                <el-form-item label="图片" style="margin-left: 18px">
+                    <el-input type="text" v-model="form.img"
+                              placeholder=""></el-input>
+                    <el-upload
+                            class="upload-demo"
+                            action="/forest_sys/upload"
+                            :on-preview="handlePreview"
+                            :on-remove="handleRemove"
+                            :on-success="uploadSuccess2"
+                            :file-list="fileList"
+                            list-type="picture"
+                            :limit="1"
+                            :on-exceed="handleExceed"
+                            :before-upload="ifCanUpload">
+                        <el-button size="small" type="success">上传图片</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
+                </el-form-item>
                 <br>
 
             </el-form>
@@ -76,6 +81,18 @@
         },
 
         methods: {
+            clearForm() {
+                this.form.name = "",
+                    this.form.cause = "",
+                    this.form.pattern = "",
+
+                    this.form.measure = "",
+                    this.form.harm = "",
+                    this.form.symptom = "",
+                    this.form.img = "",
+                    this.fileList = []
+
+            },
             dialogclose() {
                 this.$emit("closeAdd")
             },
@@ -86,14 +103,15 @@
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
                     method: "post",
-                    url: '/forest_sys/addPest',
+                    url: '/forest_sys/addDisease',
                     data: qs.stringify({
                         diseaseName: this.form.name,
                         diseaseCause: this.form.cause,
                         diseaseSymptom: this.form.symptom,
                         diseasePattern: this.form.pattern,
                         diseaseMeasure: this.form.measure,
-                        diseaseHarm: this.form.harm
+                        diseaseHarm: this.form.harm,
+                        diseaseImg:this.form.img
                     })
                 });
 
@@ -103,7 +121,8 @@
                         type: 'success'
                     });
                     this.dialogclose();
-                    this.showDiseaseData();
+                    this.clearForm();
+                    this.$emit("updateData")
                 }else{
                     this.$message.error('添加失败！');
                 }
@@ -117,6 +136,23 @@
             },
             handleExceed(){
                 alert("只能选择一张图片")
+            },
+            uploadSuccess2(response, file, fileList) {
+                console.log(response);
+                this.form.img = response
+                console.log(file);
+                console.log(fileList);
+            },
+            ifCanUpload(file) {
+                console.log(file)
+                if (file.type !== "image/jpeg") {
+                    console.log("只能上传image/jpeg格式的文件")
+                    return false
+                }
+                if (file.size > 1024 * 500) {
+                    console.log("文件大于500KB，无法上传")
+                    return false
+                }
             }
         }
     }
