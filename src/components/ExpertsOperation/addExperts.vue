@@ -25,9 +25,9 @@
                     </el-form-item>
                     <el-form-item label="专长" :label-width="formLabelWidth" prop="specialties">
                         <el-select v-model="form.specialties" placeholder="请选择擅长领域">
-                            <el-option label="虫害" value="1"></el-option>
-                            <el-option label="病害" value="2"></el-option>
-                            <el-option label="鼠害" value="3"></el-option>
+                            <el-option label="虫害防治" value="1"></el-option>
+                            <el-option label="病害防治" value="2"></el-option>
+                            <el-option label="鼠害防治" value="3"></el-option>
                         </el-select>
 
                     </el-form-item>
@@ -187,6 +187,10 @@
                                 work:this.search.work
                             });
                             console.log(response);
+                            this.$message({
+                                message: '添加成功成功',
+                                type: 'success'
+                            });
 
                         })
 
