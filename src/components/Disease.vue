@@ -44,7 +44,7 @@
                 :total="total"
         ></el-pagination>
 
-        <AddDisease :vis="addIsVisbale" @closeAdd="setAddClose"></AddDisease>
+        <AddDisease :vis="addIsVisbale" @closeAdd="setAddClose" @updateData="showDiseaseData"></AddDisease>
 
         <DiseaseDetail :selectedDetail="selectedRow" :detailVisble="detailIsVisible" @closeDetail="setDetailClose"></DiseaseDetail>
     </div>

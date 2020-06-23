@@ -13,7 +13,12 @@
             <p>发病规律：{{selectedDetail.pattern}}</p><br>
             <p>主要危害：{{selectedDetail.harm}}</p><br>
             <p>防治措施：{{selectedDetail.measure}}</p><br>
-            <p>图片：{{selectedDetail.img}}</p><br>
+            <p>图片：</p>
+            <el-image
+                    style="width: 100px; height: 100px"
+                    :src="'/forest_sys'+selectedDetail.img"
+            ></el-image>
+            <br>
 
         </div>
 
