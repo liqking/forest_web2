@@ -12,8 +12,9 @@
             </el-select>
             <el-form-item>
                 <el-button type="success" plain @click="submitForm()">查询</el-button>
-                <el-button type="success" icon=" el-icon-plus" plain @click="openadds">添加专家</el-button>
+                <el-button type="success" icon=" el-icon-plus" plain @click="openadds">添加用户</el-button>
                 <addUser :openadd.sync="openadd"></addUser>
+
             </el-form-item>
         </el-form>
         <template>
@@ -71,7 +72,7 @@
                 </el-pagination>
             </div>
         </template>
-
+        <updateUser :openupdate.sync="openupdate"></updateUser>
     </div>
 </template>
 
@@ -80,9 +81,11 @@
     // import qs from "qs";
     import axios from "axios";
     import addUser from "./ExpertsOperation/addUser";
+    import updateUser from "./ExpertsOperation/updateUser";
     export default {
         components: {
-            addUser
+            addUser,
+            updateUser
         },
         computed: {
             ...mapState('Experts', ["open"])
@@ -91,6 +94,7 @@
         data() {
             return {
                 openadd :false,
+                openupdate:false,
                 tableData: [{}],
                 ruleForm: {
                     usergrade: '',
@@ -103,9 +107,9 @@
         },
         methods: {
 
-            tableRowClassName({row, rowIndex}) {
-                console.log(this.open)
-                console.log(row);
+            tableRowClassName({ rowIndex}) {
+                // console.log(this.open)
+                // console.log(row);
                 if (rowIndex === 1) {
                     return 'warning-row';
                 } else if (rowIndex === 3) {
@@ -158,10 +162,19 @@
                 this.tableData = response.data.list;
             },
             //编辑
-            handleEdit(row) {
-
-                console.log(row)
-
+            async handleEdit(row) {
+                let response = await axios({
+                    url: '/forest_sys/showuserinfo',
+                    method: "get",
+                    params: {
+                        username: row.username
+                    }
+                });
+                console.log(response.data)
+                this.$store.commit('set_thisname', response.data.username)
+                this.$store.commit('set_userrealname',response.data.userrealname)
+                this.$store.commit('set_thisusergrade',response.data.usergrade)
+                this.openupdate = true;
             },
             myconfirm (row) {
                 if(confirm('确定要删除吗')==true){

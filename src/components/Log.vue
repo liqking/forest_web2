@@ -1,116 +1,175 @@
 <template>
     <div>
-        <!--出库-->
-
-        <h1 id="title">日志信息</h1>
         <!--查询-->
-        <el-form :model="form" :inline="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form :model="ruleForm" :inline="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="日期范围">
                 <el-col :span="8">
-                    <el-date-picker type="date" placeholder="起始日期" v-model="form.startDate" value-format="yyyy-MM-dd"
-                                    style="width: 100%;"></el-date-picker>
+                    <el-date-picker type="date" placeholder="起始日期" v-model="ruleForm.startDate" value-format="yyyy-MM-dd"   style="width: 100%;"></el-date-picker>
                 </el-col>
                 <el-col class="line" :span="2" style="text-align: right">——</el-col>
                 <el-col :span="8" style="margin-left: 12px">
-                    <el-date-picker type="date" placeholder="结束日期" v-model="form.endDate" value-format="yyyy-MM-dd"
-                                    style="width: 100%;"></el-date-picker>
+                    <el-date-picker type="date" placeholder="结束日期" v-model="ruleForm.endDate" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
                 </el-col>
             </el-form-item>
-            <el-button type="success" icon="el-icon-search" plain @click="query()">查询</el-button>
+            <el-form-item>
+                <el-button type="success" plain @click="submitForm()">查询</el-button>
+            </el-form-item>
         </el-form>
-
-
-        <!--初始化-->
         <template>
             <el-table
                     :data="tableData"
-                    @row-click="tableClick"
-                    :cell-style="tableStyle"
-                    :row-class-name="tableRowClassName"
-                    style="width: 800px;height: 357px;left: 50px">
-                <el-table-column prop="loginfo" label="日志类容" width="180"></el-table-column>
-                <el-table-column prop="logdata" label="日期" width="180"></el-table-column>
+                    style="width: 100%"
+                    :row-class-name="tableRowClassName">
+                <el-table-column
+                        prop="loginfo"
+                        label="日志"
+                        width="350">
+                </el-table-column>
+                <el-table-column
+                        prop="logdata"
+                        label="日期"
+                        width="150">
+                </el-table-column>
 
             </el-table>
         </template>
-
-        <!--主页面分页-->
-        <div class="block">
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page=currentPage
-                    :page-sizes="[3, 5, 10]"
-                    :page-size=pageSize
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total=totalPage>
-            </el-pagination>
-        </div>
+        <template>
+            <!--分页-->
+            <div class="block">
+                <span class="demonstration"></span>
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :page-sizes="[2,4,6]"
+                        :page-size="pageSize"
+                        layout="total, prev, pager, next,sizes"
+                        :total="total">
+                </el-pagination>
+            </div>
+        </template>
     </div>
 </template>
 
 <script>
-    import axios from 'axios'
-    import {mapMutations, mapState} from 'vuex';
-
+    import {mapState} from 'vuex';
+    // import qs from "qs";
+    import axios from "axios";
     export default {
-        name: "log",
+        components: {
+        },
+        computed: {
+            ...mapState('Experts', ["open"])
+        },
+        name: "User",
         data() {
             return {
-                form: {
-                    loginfo: '',
-                    logdata: '',
-                    className: '',
+                openadd :false,
+                openupdate:false,
+                tableData: [{}],
+                ruleForm: {
+                    usergrade: '',
                 },
-                tableData: [],
-                currentPage: 1,
-                pageSize: 3,
-                totalPage: 0,
-                loginfo: '',    //日志类容
-                logdata: '', //日期
+                pageSize: 4,
+                currentPage:1,
+                total: 0,
+                startDate:1,
+                endDate:1
+                // currentPage1: 5,
             }
         },
         methods: {
-            async query() {    //查询
-                let response = await axios({
-                    url: '/forest_sys/seeklog',
-                    method: 'get',
-                    params: {
-                        startDate: this.form.startDate,
-                        endDate: this.form.endDate,
-                        currentPage: this.currentPage,
-                        pageSize: this.pageSize
-                    }
-                });
-                this.tableData = this.formattingDate(response.data.list);
-                this.currentPage = response.data.pageNum,
-                    this.pageSize = response.data.pageSize,
-                    this.totalPage = response.data.total
-            },
-            formattingDate(arr) {   //格式化时间
-                for (let i = 0; i < arr.length; i++) {
-                    arr[i].date = arr[i].date.substring(0, arr[i].date.indexOf(" "));
+
+            tableRowClassName({ rowIndex}) {
+                // console.log(this.open)
+                // console.log(row);
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
                 }
-                return arr;
+                return '';
             },
-            async tableInit(currentPage = 1, pageSize = 3) {    //初始化表格
+            openadds() {
+                this.openadd = true;
+            },
+
+            async showPestData() {
                 let response = await axios({
                     url: '/forest_sys/showlog',
-                    method: 'get',
+                    method: "get",
                     params: {
-                        currentPage: currentPage,
-                        pageSize: pageSize
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize,
                     }
                 });
-                // console.log(response)
-                this.tableData = this.formattingDate(response.data.list);
-                this.currentPage = response.data.pageNum;
+                console.log(response.data)
+                // this.currentPage1 = response.data.pageNum
+                this.total = response.data.total;
                 this.pageSize = response.data.pageSize;
-                this.totalPage = response.data.total
+                this.tableData = response.data.list;
+
+
             },
+
+            async submitForm() {
+
+                this.currentPage = 1
+                let response = await axios({
+                    url: '/forest_sys/seeklog',
+                    method: "get",
+                    params: {
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize,
+                        startDate: this.ruleForm.startDate,
+                        endDate:this.ruleForm.endDate
+                    }
+                });
+                console.log(response.data)
+                // this.currentPage1 = response.data.pageNum
+                this.total = response.data.total;
+                this.pageSize = response.data.pageSize;
+                this.tableData = response.data.list;
+            },
+
+            async handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize = val
+                let response = await axios({
+                    url: '/forest_sys/showlog',
+                    method: "get",
+                    params: {
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize,
+                    }
+                });
+                console.log(response.data)
+                this.currentPage1 = response.data.pageNum
+                this.total = response.data.total;
+                this.pageSize = response.data.pageSize;
+                this.tableData = response.data.list;
+            },
+            async handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.currentPage = val
+                let response = await axios({
+                    url: '/forest_sys/showlog',
+                    method: "get",
+                    params: {
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize,
+                    }
+                });
+                console.log(response.data)
+                this.currentPage1 = response.data.pageNum
+                this.total = response.data.total;
+                this.pageSize = response.data.pageSize;
+                this.tableData = response.data.list;
+            }
         },
-
-
+        mounted: function () {
+            this.showPestData();
+            // this.$on("closeAdd",this.setAddClose())
+        }
     }
 </script>
 

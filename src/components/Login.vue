@@ -74,9 +74,19 @@
                         });
                         if (response.data) {
                             this.$alert("登录成功", "提示", {
-                                callback:()=>{
-                                    this.$store.commit('set_username',response.data.username)
-                                    this.$store.commit('set_usergrade',response.data.usergrade)
+                                callback: async () => {
+                                    await axios({
+                                        headers: {
+                                            "Content-Type": "application/x-www-form-urlencoded"
+                                        },
+                                        url: "/forest_sys/addlog",
+                                        method: "post",
+                                        data: qs.stringify({
+                                            username: this.ruleForm.username,
+                                        })
+                                    });
+                                    this.$store.commit('set_username', response.data.username)
+                                    this.$store.commit('set_usergrade', response.data.usergrade)
                                     this.$router.push('/')
                                 }
                             });
