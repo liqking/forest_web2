@@ -232,6 +232,7 @@
                 SelectionChange:'',
                 SelectTheLineItem:[],//记录当前显示选中物品的库存数量 和 下标
                 verify:true,
+                oldArr:[]
             }
         },
         methods: {
@@ -439,9 +440,13 @@
                         arr[i].type = '器械'
                     }
 
-                    if(is != 1){
+
+                    if(is != 1 || this.oldArr.length < arr.length){
                         arr[i].num = null;
                     }
+
+
+                    this.oldArr = arr;
                 }
                 return arr;
             },
