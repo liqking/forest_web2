@@ -2,13 +2,13 @@
     <div>
         <!--查询-->
         <el-form :model="ruleForm" :inline="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="查询专家信息" prop="">
+            <el-form-item label="查询专家信息"  prop="name">
                 <el-input v-model="ruleForm.name" placeholder="姓名" style="width: 120px"></el-input>
             </el-form-item>
-            <el-form-item label="专长" prop="">
+            <el-form-item label="专长" prop="specialties">
                 <el-input v-model="ruleForm.specialties" style="width: 120px"></el-input>
             </el-form-item>
-            <el-form-item label="工作单位" prop="">
+            <el-form-item label="工作单位" prop="work">
                 <el-input v-model="ruleForm.work" style="width: 120px"></el-input>
             </el-form-item>
             <el-form-item>
@@ -177,8 +177,20 @@
                     }
                 });
             },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
+            resetForm(ruleForm) {
+
+                this.$refs[ruleForm].resetFields();
+                this.setSearch(this.ruleForm);
+                this.setPageNumber(1);
+                this.setNumber(4);
+
+                this.setExperts({
+                    currentpage: this.pageNumber
+                    , pagesize: this.number,
+                    name: this.ruleForm.name,
+                    specialties: this.ruleForm.specialties,
+                    work: this.ruleForm.work
+                });
             },
             handleShow(row) {
                 //详情
