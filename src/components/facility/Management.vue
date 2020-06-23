@@ -506,6 +506,8 @@
                             message: '操作失败！',
                             type: 'error'
                         });
+
+                        this.idList = [];
                         return false;
                     }
                 });
