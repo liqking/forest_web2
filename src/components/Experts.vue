@@ -231,7 +231,10 @@
                                 type: 'success',
                                 message: '删除成功!'
                             })
+                        //判断当页有几条数据
+                        if (this.expertspage.size==1){this.setPageNumber(this.pageNumber-1);}
                         //删除后刷新
+                        
                         this.setExperts({
                             currentpage: this.pageNumber
                             , pagesize: this.number,

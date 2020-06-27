@@ -178,7 +178,7 @@
                                 head:this.form.head
                             })
                         }).then(()=>{
-
+                            this.$refs[form].resetFields();
                             this.setExperts({
                                 currentpage:this.pageNumber
                                 ,pagesize:this.number,

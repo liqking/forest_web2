@@ -26,6 +26,7 @@ export default {
     },
     mutations: {
         setExperts1(state, expertspage) {
+            console.log(expertspage);
             state.expertspage = expertspage;
         },
         setExpertsTalks(state,expertsTalks){

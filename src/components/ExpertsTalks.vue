@@ -237,8 +237,9 @@
                        }
                    });
                   console.log( response.data);
-                 // 刷新当前页面
-
+                 //将页面数据设置为空， 刷新当前页面
+                  this.value=[];
+                  this.ruleForm.txt='';
                    this.setEventBean(this.eventBean.eventId);
 
                }

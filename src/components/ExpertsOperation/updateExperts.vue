@@ -182,8 +182,10 @@
                 this.$emit('update:openUpdate',false)
             },
             handleAvatarSuccess(res, file) {
-                this.form.head = URL.createObjectURL(file.raw);
-                console.log(this.form.head);
+                console.log(file);
+                this.experts.head="/forest_sys"+res;
+               // this.form.head = URL.createObjectURL(file.raw);
+                console.log(this.experts.head);
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
