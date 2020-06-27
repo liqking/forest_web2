@@ -118,7 +118,7 @@
                 }
             else {
                     this.$message({
-                        message: '两次密码不一致',
+                        message: '账号或者密码不正确',
                         type: 'success'
                     });
                 }
