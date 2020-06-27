@@ -134,7 +134,7 @@
                     params: {
                         currentPage: this.currentPage,
                         pageSize: this.pageSize,
-                        usergrade: "所有用户"
+                        usergrade: this.ruleForm.usergrade
                     }
                 });
                 console.log(response.data.size)
@@ -211,7 +211,7 @@
                     params: {
                         currentPage: this.currentPage,
                         pageSize: this.pageSize,
-                        usergrade: "所有用户"
+                        usergrade: this.ruleForm.usergrade
                     }
                 });
                 console.log(response.data)
@@ -228,7 +228,7 @@
                     params: {
                         currentPage: this.currentPage,
                         pageSize: this.pageSize,
-                        usergrade: "所有用户"
+                        usergrade: this.ruleForm.usergrade
                     }
                 });
                 this.currentPage1 = response.data.pageNum

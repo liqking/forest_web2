@@ -41,7 +41,7 @@
     import qs from "qs";
 
     export default {
-        inject:['submitForm'],
+        inject: ['submitForm'],
         name: "addUser",
         props: ["openadd"],
         computed: {
@@ -72,43 +72,55 @@
             async add(experts) {
                 // console.log(this.form.newuserpwd);
                 //添加
-                let response = await axios({
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    url: "/forest_sys/showuserinfo",
-                    method: "post",
-                    data: qs.stringify({
-                        username: experts.username,
-                    })
 
-                });
-                // console.log(!response.data);
-                if (!response.data) {
-                    await axios({
-
+                if (this.userpwd == this.newuserpwd && this.form.username!='') {
+                    let response = await axios({
                         headers: {
                             "Content-Type": "application/x-www-form-urlencoded"
                         },
-                        url: '/forest_sys/adduser',
-                        method: 'post',
+                        url: "/forest_sys/showuserinfo",
+                        method: "post",
                         data: qs.stringify({
                             username: experts.username,
-                            userpwd: experts.userpwd,
-                            newuserpwd: experts.newuserpwd,
-                            usergrade: experts.usergrade,
-                            userrealname: experts.userrealname,
                         })
 
                     });
-                    this.form.username = '',
-                        this.form.userpwd = '',
-                        this.form.newuserpwd = '',
-                        this.form.usergrade = '',
-                        this.form.userrealname = '',
-                        this.submitForm();
-                } else {
-                    alert("账号已存在")
+                    // console.log(!response.data);
+                    if (!response.data) {
+                        await axios({
+
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            url: '/forest_sys/adduser',
+                            method: 'post',
+                            data: qs.stringify({
+                                username: experts.username,
+                                userpwd: experts.userpwd,
+                                newuserpwd: experts.newuserpwd,
+                                usergrade: experts.usergrade,
+                                userrealname: experts.userrealname,
+                            })
+
+                        });
+                        this.form.username = '',
+                            this.form.userpwd = '',
+                            this.form.newuserpwd = '',
+                            this.form.usergrade = '',
+                            this.form.userrealname = '',
+                            this.submitForm();
+                    } else {
+                        this.$message({
+                            message: '账号已存在',
+                            type: 'success'
+                        });
+                    }
+                }
+            else {
+                    this.$message({
+                        message: '两次密码不一致',
+                        type: 'success'
+                    });
                 }
 
             },

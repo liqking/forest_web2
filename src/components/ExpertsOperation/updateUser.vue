@@ -41,6 +41,7 @@
     import qs from "qs";
 
     export default {
+        inject: ['submitForm'],
         name: "updateuser",
         props: ["openupdate"],
         computed: {
@@ -79,7 +80,8 @@
             // ...mapActions('Experts', ["setExperts"]),
             async add(experts) {
                 //修改
-                 await axios({
+                if (this.userpwd == this.newuserpwd && this.form.userpwd!=''){
+                    await axios({
 
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
@@ -93,10 +95,15 @@
                         usergrade:this.thisusergrade,
                         userrealname:this.$store.state.userrealname,
                     })
-
                 });
+                    this.submitForm();
+                }else {
+                    this.$message({
+                        message: '密码格式不正确',
+                        type: 'success'
+                    });
 
-                window.location.reload();
+                }
             },
             dialogClose() {
                 this.$emit('update:openupdate', false)
