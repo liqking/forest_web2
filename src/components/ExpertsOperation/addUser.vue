@@ -41,10 +41,11 @@
     import qs from "qs";
 
     export default {
+        inject:['submitForm'],
         name: "addUser",
-        props:["openadd"],
+        props: ["openadd"],
         computed: {
-            ...mapState('Experts', ["pageNumber","number","search"])
+            ...mapState('Experts', ["pageNumber", "number", "search"])
         },
         data() {
             return {
@@ -55,41 +56,64 @@
                     //密码
                     userpwd: '',
                     //新密码
-                    newuserpwd:'',
+                    newuserpwd: '',
                     //权限
                     usergrade: '',
                     //真名
                     userrealname: '',
                     delivery: false,
                 },
-                formLabelWidth: '80px'
+                formLabelWidth: '80px',
             };
         },
         methods: {
-            ...mapActions('Experts',["setExperts"]),
-            async  add(experts){
+            ...mapActions('Experts', ["setExperts"]),
+
+            async add(experts) {
                 // console.log(this.form.newuserpwd);
                 //添加
-               await axios({
-
+                let response = await axios({
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    url:'/forest_sys/adduser',
-                    method:'post',
-                    data:qs.stringify({
-                        username:experts.username,
-                        userpwd:experts.userpwd,
-                        newuserpwd:experts.newuserpwd,
-                        usergrade:experts.usergrade,
-                        userrealname:experts.userrealname,
+                    url: "/forest_sys/showuserinfo",
+                    method: "post",
+                    data: qs.stringify({
+                        username: experts.username,
                     })
 
                 });
+                // console.log(!response.data);
+                if (!response.data) {
+                    await axios({
 
-                window.location.reload();
-            }, dialogClose(){
-                this.$emit('update:openadd',false)
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        url: '/forest_sys/adduser',
+                        method: 'post',
+                        data: qs.stringify({
+                            username: experts.username,
+                            userpwd: experts.userpwd,
+                            newuserpwd: experts.newuserpwd,
+                            usergrade: experts.usergrade,
+                            userrealname: experts.userrealname,
+                        })
+
+                    });
+                    this.form.username = '',
+                        this.form.userpwd = '',
+                        this.form.newuserpwd = '',
+                        this.form.usergrade = '',
+                        this.form.userrealname = '',
+                        this.submitForm();
+                } else {
+                    alert("账号已存在")
+                }
+
+            },
+            dialogClose() {
+                this.$emit('update:openadd', false)
             }
         }
     }

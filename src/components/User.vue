@@ -87,6 +87,11 @@
             addUser,
             updateUser
         },
+        provide(){
+            return{
+                submitForm:this.submitForm
+            }
+        },
         computed: {
             ...mapState('Experts', ["open"])
         },
@@ -119,6 +124,7 @@
             },
             openadds() {
                 this.openadd = true;
+                // this.submitForm()
             },
 
             async showPestData() {
@@ -131,16 +137,14 @@
                         usergrade: "所有用户"
                     }
                 });
-                console.log(response.data)
+                console.log(response.data.size)
+                if(response.data.size==1){
+                    this.currentPage -=1;
+                }
                 // this.currentPage1 = response.data.pageNum
                 this.total = response.data.total;
                 this.pageSize = response.data.pageSize;
                 this.tableData = response.data.list;
-                console.log(this.currentPage1,
-                    this.pageSize,
-                    this.tableData,
-                    this.total)
-
             },
 
             async submitForm() {
@@ -182,6 +186,7 @@
                 }
             },
             //删除
+
             async handleDelete(row) {
                 console.log(row.username)
                 await axios({
@@ -194,6 +199,7 @@
                         username: row.username,
                     }
                 });
+
                 this.showPestData()
             },
             async handleSizeChange(val) {
@@ -215,7 +221,6 @@
                 this.tableData = response.data.list;
             },
             async handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
                 this.currentPage = val
                 let response = await axios({
                     url: '/forest_sys/seekuser',
@@ -226,7 +231,6 @@
                         usergrade: "所有用户"
                     }
                 });
-                console.log(response.data)
                 this.currentPage1 = response.data.pageNum
                 this.total = response.data.total;
                 this.pageSize = response.data.pageSize;
