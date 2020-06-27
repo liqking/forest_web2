@@ -19,7 +19,7 @@
                 ></el-input>
             </el-form-item>
             <el-form-item class="myBtn" style="margin-left: 30px">
-                <el-button type="success" plain icon="el-icon-plus" @click="showDiseaseData">查询</el-button>
+                <el-button type="success" plain icon="el-icon-plus" @click="searchData">查询</el-button>
             </el-form-item>
         </el-form>
 
@@ -106,6 +106,10 @@
             },
             setAddClose(){
                 this.addIsVisbale=false;
+            },
+            searchData(){
+                this.currentPage=1;
+                this.showDiseaseData();
             },
             async showDiseaseData() {
                 let response = await axios({
