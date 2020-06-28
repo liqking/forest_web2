@@ -73,7 +73,7 @@
                 // console.log(this.form.newuserpwd);
                 //添加
 
-                if (/^.{1,20}$/.test(this.form.username) && /^.{3,}$/.test(this.userpwd) && this.userpwd == this.newuserpwd && this.form.username!='') {
+                if (/^.{2,20}$/.test(this.form.username) && /^.{3,}$/.test(this.form.userpwd) && this.form.userpwd == this.form.newuserpwd && this.form.username!='') {
                     let response = await axios({
                         headers: {
                             "Content-Type": "application/x-www-form-urlencoded"

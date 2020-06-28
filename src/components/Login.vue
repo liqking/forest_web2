@@ -51,7 +51,7 @@
         },
         methods: {
             validateUsername(rule, value, callback) {
-                if (/^.{1,20}$/.test(value)) {
+                if (/^.{2,20}$/.test(value)) {
                     callback();
                 } else {
                     callback(new Error("账号不能少于2位，且数字字母下划线组成"));
