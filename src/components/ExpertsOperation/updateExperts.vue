@@ -5,41 +5,37 @@
         <!-- <el-button type="text" @click="dialogFormVisible = true"></el-button>-->
 
         <el-dialog title="添加专家" :visible.sync="openUpdate" :before-close="dialogClose">
-            <el-form :model="experts"
-                     :rules="rules"
-                     ref="experts">
+            <el-form :model="experts">
                 <!--右边-->
                 <div class="left1">
-                    <el-form-item label="姓名:" :label-width="formLabelWidth">
-                        {{experts.expertsName}}
-                      <!--  <el-input v-model="experts.expertsName" autocomplete="off"></el-input>-->
+                    <el-form-item label="姓名" :label-width="formLabelWidth">
+                        <el-input v-model="experts.expertsName" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="出生日期" :label-width="formLabelWidth" prop="date">
+                    <el-form-item label="出生日期" :label-width="formLabelWidth">
                         <div class="block">
                             <!-- <span class="demonstration">默认</span>-->
                             <el-date-picker
                                     v-model="experts.date"
                                     type="date"
-                                    value-format="yyyy-MM-dd"
                                     placeholder="选择日期">
                             </el-date-picker>
                         </div>
                     </el-form-item>
-                    <el-form-item label="专长:" :label-width="formLabelWidth" prop="specialties">
+                    <el-form-item label="专长" :label-width="formLabelWidth">
                         <el-select v-model="experts.specialties" placeholder="请选择擅长领域">
-                            <el-option label="虫害防治" value="1"></el-option>
-                            <el-option label="病害防治" value="2"></el-option>
-                            <el-option label="鼠害防治" value="3"></el-option>
+                            <el-option label="虫害" value="1"></el-option>
+                            <el-option label="病害" value="2"></el-option>
+                            <el-option label="鼠害" value="3"></el-option>
                         </el-select>
 
                     </el-form-item>
-                    <el-form-item label="电话:" :label-width="formLabelWidth">
+                    <el-form-item label="电话" :label-width="formLabelWidth">
                         <el-input v-model="experts.telephone" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="通讯地址:" :label-width="formLabelWidth">
+                    <el-form-item label="通讯地址" :label-width="formLabelWidth">
                         <el-input v-model="experts.site" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="性别:" :label-width="formLabelWidth">
+                    <el-form-item label="性别：" :label-width="formLabelWidth">
                         <el-radio v-model="experts.sex" label="男">男</el-radio>
                         <el-radio v-model="experts.sex" label="女">女</el-radio>
                     </el-form-item>
@@ -47,7 +43,7 @@
                 </div>
                 <!--左边-->
                 <div class="right1">
-                    <el-form-item label="照片:" :label-width="formLabelWidth">
+                    <el-form-item label="照片" :label-width="formLabelWidth">
                         <!--头像上传-->
                         <el-upload
                                 class="avatar-uploader "
@@ -59,13 +55,13 @@
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </el-form-item>
-                    <el-form-item label="职务:" :label-width="formLabelWidth">
+                    <el-form-item label="职务" :label-width="formLabelWidth">
                         <el-input v-model="experts.duty" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="工作单位:" :label-width="formLabelWidth">
+                    <el-form-item label="工作单位" :label-width="formLabelWidth">
                         <el-input v-model="experts.work" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="邮箱:" :label-width="formLabelWidth">
+                    <el-form-item label="邮箱" :label-width="formLabelWidth">
                         <el-input v-model="experts.mailbox" autocomplete="off"></el-input>
                     </el-form-item>
                 </div>
@@ -73,7 +69,7 @@
             <div slot="footer" class="dialog-footer">
                 <!--  dialogFormVisible = false-->
                 <el-button @click="$emit('update:openUpdate',false)">取 消</el-button>
-                <el-button type="primary" @click="add('experts');">确 定</el-button>
+                <el-button type="primary" @click="$emit('update:openUpdate',false);add(experts);">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -109,73 +105,42 @@
                     mailbox:'',
                     delivery: false,
                 },*/
-                formLabelWidth: '80px',
-                rules: {
-                    specialties: [
-                        { required: true, message: '请选择擅长领域', trigger: 'change' }
-                    ],
-                    date: [
-                        { required: true, message: '选择出生日期', trigger: 'change' }
-                    ]
-
-                }
+                formLabelWidth: '80px'
             };
         },
         methods: {
             ...mapActions('Experts',["setExperts"]),
-              add(experts){
-                this.$emit('update:openUpdate',false);
-
-
-                this.$refs[experts].validate(async (valid) => {
-                    if (valid) {
-
-                        let response = await axios({
-                            headers: {
-                                "Content-Type": "application/x-www-form-urlencoded"
-                            },
-                            url:'/forest_sys/UpdateExperts',
-                            method:'post',
-                            data:qs.stringify({
-                                expertsName:this.experts.expertsName,
-                                date:this.experts.date,
-                                sex:this.experts.sex,
-                                specialties:this.experts.specialties,
-                                telephone:this.experts.telephone,
-                                site:this.experts.site,
-                                duty:this.experts.duty,
-                                work:this.experts.work,
-                                mailbox:this.experts.mailbox,
-                                head:this.experts.head,
-                                id:this.experts.id
-                            })
-                        });
-
-
-                        this.setExperts({
-                            currentpage:this.pageNumber
-                            ,pagesize:this.number,
-                            name:this.search.name,
-                            specialties:this.search.specialties,
-                            work:this.search.work
-                        });
-                        console.log(response.data)
-
-
-
-
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
+            async  add(experts){
+                let response = await axios({
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    url:'/forest_sys/UpdateExperts',
+                    method:'post',
+                    data:qs.stringify({
+                        expertsName:experts.expertsName,
+                        date:experts.date,
+                        sex:experts.sex,
+                        specialties:experts.specialties,
+                        telephone:experts.telephone,
+                        site:experts.site,
+                        duty:experts.duty,
+                        work:experts.work,
+                        mailbox:experts.mailbox,
+                        head:experts.head,
+                        id:experts.id
+                    })
                 });
 
 
-
-
-
-
-
+                this.setExperts({
+                    currentpage:this.pageNumber
+                    ,pagesize:this.number,
+                    name:this.search.name,
+                    specialties:this.search.specialties,
+                    work:this.search.work
+                });
+                console.log(response.data)
 
             },
             dialogClose(){
