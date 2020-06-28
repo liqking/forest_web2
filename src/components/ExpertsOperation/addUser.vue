@@ -73,7 +73,7 @@
                 // console.log(this.form.newuserpwd);
                 //添加
 
-                if (this.userpwd == this.newuserpwd && this.form.username!='') {
+                if (/^.{3,}$/.test(this.userpwd) && this.userpwd == this.newuserpwd && this.form.username!='' && /^.{1,20}$/.test(this.form.username)) {
                     let response = await axios({
                         headers: {
                             "Content-Type": "application/x-www-form-urlencoded"
@@ -118,7 +118,7 @@
                 }
             else {
                     this.$message({
-                        message: '账号或者密码不正确',
+                        message: '账号或者密码格式不正确',
                         type: 'success'
                     });
                 }
