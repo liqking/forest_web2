@@ -25,8 +25,9 @@
                 </el-table-column>
                 <el-table-column
                         width="200"
-                        prop="state"
-                        label="灾情状态">
+                        prop=""
+                        label="灾情状态" >
+                    <!--state-->无法解决,申请会商
                 </el-table-column>
                 <el-table-column label="操作" width="240">
                     <template slot-scope="scope">
@@ -175,6 +176,7 @@
         },
         created() {
             this.setExpertsTalksPage({currentpage: this.pageNumber, pagesize: this.size});
+
         },
         methods: {
             ...mapActions('Experts', ["setExpertsTalksPage", "setEventBean","setExpertsList"]),
